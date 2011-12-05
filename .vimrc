@@ -42,7 +42,7 @@ no j :0<CR>
 no m s
 nmap k :w<CR>
 
-nmap <F5> :w:! make<CR>
+nmap <F5> :w<CR> :! make<CR>
 
 " remove trailing whitespace with :Clean
 command Clean %s/[\t ][\t ]*$//g
