@@ -1,9 +1,9 @@
-
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
 set smartindent         " do this intelligently for code
-set tabstop=4           " 4 char tabs
-set shiftwidth=4        " 4 char >> shifts
+set tabstop=2           " 2 char tabs
+set shiftwidth=2        " 2 char >> shifts
+set expandtab
 set incsearch           " search as we type
 set hlsearch			" highlight search results
 
@@ -44,23 +44,14 @@ nmap k :w<CR>
 
 nmap <F5> :w<CR> :! make<CR>
 
-" remove trailing whitespace with :Clean
-command Clean %s/[\t ][\t ]*$//g
-
 " insert new line at 80 characters with :Doc
 command -bar Doc set textwidth=80 | set fo+=to
 
+" allow tabs in makefiles
+autocmd FileType make setlocal noexpandtab
+
 syntax on
 
-set nocp
-filetype plugin on
 
-"helptags $HOME/.vim/doc
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
-set completeopt-=preview "disable annoying window
-let OmniCpp_ShowPrototypeInAbbr = 1 "show function parameters
-let OmniCpp_MayCompleteScope = 1 "autocomplete after ::
-let OmniCpp_NamespaceSearch=2
-let OmniCpp_DefaultNamespaces = ["std"]
 
