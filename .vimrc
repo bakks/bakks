@@ -38,9 +38,14 @@ nmap <C-t> tttttttt
 nmap <C-n> nnnnnnnn
 nmap <C-s> ssssssss
 
-no j :0<CR>
-no m s
-nmap k :w<CR>
+" jump to top
+no j :0<CR>   
+" jump to top
+no q :$<CR>   
+" replace text
+no m s        
+" write file
+nmap k :w<CR> 
 
 nmap <F5> :w<CR> :! make<CR>
 
@@ -51,7 +56,4 @@ command -bar Doc set textwidth=80 | set fo+=to
 autocmd FileType make setlocal noexpandtab
 
 syntax on
-
-
-
 
