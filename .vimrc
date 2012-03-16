@@ -39,13 +39,13 @@ nmap <C-n> nnnnnnnn
 nmap <C-s> ssssssss
 
 " jump to top
-no j :0<CR>   
+no j :0<CR>
 " jump to top
-no q :$<CR>   
+no q :$<CR>
 " replace text
-no m s        
+no m s
 " write file
-nmap k :w<CR> 
+nmap k :w<CR>
 
 nmap <F5> :w<CR> :! make<CR>
 
