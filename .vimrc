@@ -3,9 +3,9 @@ set autoindent          " auto indent next line
 set smartindent         " do this intelligently for code
 set tabstop=2           " 2 char tabs
 set shiftwidth=2        " 2 char >> shifts
-set expandtab
+set expandtab           " turn tabs into spaces
 set incsearch           " search as we type
-set hlsearch			" highlight search results
+set hlsearch			      " highlight search results
 
 
 " alt-j and alt-k move the current line up and down
@@ -15,6 +15,8 @@ inoremap <A-t> <Esc>:m-2<CR>==gi
 inoremap <A-h> <Esc>:m+<CR>==gi
 vnoremap <A-t> :m-2<CR>gv=gv
 vnoremap <A-h> :m'>+1<CR>gv=gv
+
+nmap U :redo<CR>
 
 " dvorak mappings
 nmap h <Left>
