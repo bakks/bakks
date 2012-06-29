@@ -5,7 +5,7 @@ set tabstop=2           " 2 char tabs
 set shiftwidth=2        " 2 char >> shifts
 set expandtab           " turn tabs into spaces
 set incsearch           " search as we type
-set hlsearch			      " highlight search results
+set hlsearch            " highlight search results
 
 
 " alt-j and alt-k move the current line up and down
