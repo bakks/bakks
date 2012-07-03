@@ -9,7 +9,6 @@ set hlsearch            " highlight search results
 
 colorscheme paintbox
 
-
 " alt-j and alt-k move the current line up and down
 nnoremap <A-t> :m-2<CR>==
 nnoremap <A-h> :m+<CR>==
