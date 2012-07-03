@@ -7,6 +7,8 @@ set expandtab           " turn tabs into spaces
 set incsearch           " search as we type
 set hlsearch            " highlight search results
 
+colorscheme paintbox
+
 
 " alt-j and alt-k move the current line up and down
 nnoremap <A-t> :m-2<CR>==

@@ -1,0 +1,17 @@
+set hintchars=aoeuidhtns
+
+nmap t jjjjj
+nmap n kkkkk
+nmap <C-t> <PageDown>
+nmap <C-n> <PageUp>
+
+nmap e :tabopen 
+nmap u <C-o>
+nmap U <C-i>
+nmap h f
+nmap H F
+
+nmap <C-b> gt
+
+nnoremap s n
+
