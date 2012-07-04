@@ -10,6 +10,7 @@
 
 set background=dark
 
+
 hi clear
 if exists("syntax_on")
   syntax reset
@@ -29,22 +30,22 @@ let colors_name = "paintbox"
 " diff*
 " pmenu
 
-hi Comment    guifg=#5a5a5a guibg=#19191d gui=none
-hi Cursor     guifg=#19191d guibg=#dddddd gui=bold
-hi Constant   guifg=#238bcc guibg=#19191d gui=none
+hi Comment    guifg=#5a5a5a guibg=#19191d gui=none term=none cterm=none
+hi Cursor     guifg=#19191d guibg=#dddddd gui=none term=none cterm=none
+hi Constant   guifg=#238bcc guibg=#19191d gui=none term=none cterm=none
 hi CursorLine               guibg=#343434 gui=none
 hi Folded     guifg=#dddddd guibg=#5a5a5a gui=italic
 hi MatchParen guifg=#bd0d74 guibg=#19191d gui=reverse
-hi ModeMsg    guifg=#bd0d74 guibg=#19191d gui=bold
-hi Normal     guifg=#dddddd guibg=#19191d gui=none
-hi PreProc    guifg=#bd0d74 guibg=#19191d gui=none
-hi Search   guifg=#19191d guibg=#d9c900 gui=none
-hi Special    guifg=#904ca8 guibg=#19191d gui=none
-hi Statement  guifg=#9fc439 guibg=#19191d gui=none
-hi StatusLine   guifg=#bd0d74 guibg=#dddddd gui=bold
-hi StatusLineNC guifg=#dddddd guibg=#585858 gui=bold
-hi Todo     guifg=#cf310c guibg=#19191d gui=bold
-hi Type     guifg=#e08a1f guibg=#19191d gui=none
+hi ModeMsg    guifg=#bd0d74 guibg=#19191d gui=none term=none cterm=none
+hi Normal     guifg=#dddddd guibg=#19191d gui=none term=none cterm=none
+hi PreProc    guifg=#bd0d74 guibg=#19191d gui=none term=none cterm=none
+hi Search   guifg=#19191d guibg=#d9c900 gui=none 
+hi Special    guifg=#904ca8 guibg=#19191d gui=none term=none cterm=none
+hi Statement  guifg=#9fc439 guibg=#19191d gui=none term=none cterm=none
+hi StatusLine   guifg=#bd0d74 guibg=#dddddd gui=none term=none cterm=none
+hi StatusLineNC guifg=#dddddd guibg=#585858 gui=none term=none cterm=none
+hi Todo     guifg=#cf310c guibg=#19191d gui=none term=none cterm=none
+hi Type     guifg=#e08a1f guibg=#19191d gui=none term=none cterm=none
 hi Underlined guifg=#dddddd guibg=#19191d gui=underline
 hi Visual   guifg=#19191d guibg=#d9c900 gui=none
 

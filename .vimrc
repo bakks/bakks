@@ -59,4 +59,5 @@ command -bar Doc set textwidth=80 | set fo+=to
 autocmd FileType make setlocal noexpandtab
 
 syntax on
+highlight Normal ctermbg=darkgrey
 
