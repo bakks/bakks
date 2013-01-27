@@ -8,7 +8,7 @@
 "           initial version
 
 
-set background=dark
+"set background=dark
 
 
 hi clear

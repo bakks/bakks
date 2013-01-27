@@ -6,8 +6,8 @@ set shiftwidth=2        " 2 char >> shifts
 set expandtab           " turn tabs into spaces
 set incsearch           " search as we type
 set hlsearch            " highlight search results
-
-colorscheme paintbox
+set laststatus=2        " always show status line
+set backspace=indent,eol,start
 
 " alt-j and alt-k move the current line up and down
 nnoremap <A-t> :m-2<CR>==
@@ -50,7 +50,10 @@ no m s
 " write file
 nmap k :w<CR>
 
+" save and run make in current dir
 nmap <F5> :w<CR> :! make<CR>
+" kill trailing whitespace
+nmap - :%s/\s\+$//<CR>
 
 " insert new line at 80 characters with :Doc
 command -bar Doc set textwidth=80 | set fo+=to
@@ -58,6 +61,43 @@ command -bar Doc set textwidth=80 | set fo+=to
 " allow tabs in makefiles
 autocmd FileType make setlocal noexpandtab
 
+" color related lines
 syntax on
-highlight Normal ctermbg=darkgrey
+set t_Co=256
+colorscheme paintbox
+
+"setup highlighting for status line
+hi User1 ctermfg=190  ctermbg=27
+hi User2 ctermfg=190  ctermbg=62
+hi User3 ctermfg=190  ctermbg=132
+hi User4 ctermfg=190  ctermbg=52
+hi User5 ctermfg=190  ctermbg=54
+hi User9 ctermfg=89  ctermbg=89
+
+" function for getting file permissions used in status line
+function! s:Get_file_perm()
+  let a=getfperm(expand('%:p'))
+  if strlen(a)
+    return a
+  else
+    let b=printf("%o", xor(0777,system("umask")))
+    let c=""
+    for d in [0, 1, 2]
+      let c.=and(b[d], 4) ? "r" : "-"
+      let c.=and(b[d], 2) ? "w" : "-"
+      let c.=and(b[d], 1) ? "x" : "-"
+    endfor
+    return c
+  endif
+endfunction
+
+let w:file_perm=<sid>Get_file_perm()
+
+" set statusline
+set statusline=
+set statusline+=%1*\%<%F\                 " File+path
+set statusline+=%2*\%{w:file_perm}        " file permissions
+set statusline+=%9*\ %=\                  " filler
+set statusline+=%4*\%m%r%w                " Modified? Readonly?
+set statusline+=%1*\ %l/%L:%02c           " row/total:column
 
