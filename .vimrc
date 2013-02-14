@@ -74,6 +74,8 @@ hi User4 ctermfg=190  ctermbg=52
 hi User5 ctermfg=190  ctermbg=54
 hi User9 ctermfg=89  ctermbg=89
 
+hi Search  ctermbg=190 ctermfg=27
+
 " function for getting file permissions used in status line
 function! s:Get_file_perm()
   let a=getfperm(expand('%:p'))
