@@ -49,6 +49,8 @@ no q :$<CR>
 no m s
 " write file
 nmap k :w<CR>
+" delete newline
+no e :s/\n//<CR>
 
 " save and run make in current dir
 nmap <F5> :w<CR> :! make<CR>
