@@ -1,3 +1,4 @@
 #!/bin/bash
 
-find . -name "*" | xargs grep -sn $1
+find . -name "*" | xargs grep -sn "$@"
+
