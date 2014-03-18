@@ -31,7 +31,7 @@ let colors_name = "paintbox"
 " pmenu
 
 hi Comment    guifg=#5a5a5a guibg=#19191d gui=none term=none cterm=none
-hi Cursor     guifg=#19191d guibg=#dddddd gui=none term=none cterm=none
+hi Cursor     guifg=#19191d guibg=#904ca8 gui=none term=none cterm=none
 hi Constant   guifg=#238bcc guibg=#19191d gui=none term=none cterm=none
 hi CursorLine               guibg=#343434 gui=none
 hi Folded     guifg=#dddddd guibg=#5a5a5a gui=italic
