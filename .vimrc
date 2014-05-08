@@ -60,8 +60,9 @@ nmap - :%s/\s\+$//<CR>
 " insert new line at 80 characters with :Doc
 command -bar Doc set textwidth=80 | set fo+=to
 
-" allow tabs in makefiles
+" allow tabs in makefiles and python
 autocmd FileType make setlocal noexpandtab
+autocmd FileType python setlocal noexpandtab
 
 " color related lines
 syntax on
