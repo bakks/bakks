@@ -63,6 +63,7 @@ command -bar Doc set textwidth=80 | set fo+=to
 " allow tabs in makefiles and python
 autocmd FileType make setlocal noexpandtab
 autocmd FileType python setlocal noexpandtab
+autocmd FileType coffee setlocal noexpandtab
 
 " color related lines
 syntax on
