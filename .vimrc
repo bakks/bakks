@@ -108,3 +108,9 @@ set statusline+=%9*\ %=\                  " filler
 set statusline+=%4*\%m%r%w                " Modified? Readonly?
 set statusline+=%1*\ %l/%L:%02c           " row/total:column
 
+" re-open files at old line
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
