@@ -64,6 +64,7 @@ command -bar Doc set textwidth=80 | set fo+=to
 autocmd FileType make setlocal noexpandtab
 autocmd FileType python setlocal noexpandtab
 autocmd FileType coffee setlocal noexpandtab
+autocmd FileType go setlocal noexpandtab
 
 " color related lines
 syntax on
