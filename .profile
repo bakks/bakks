@@ -1,4 +1,5 @@
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/bin:$HOME/.rvm/bin:$PATH
+export GOPATH=~/.go
 export HISTCONTROL=ignoredups
 export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
@@ -11,9 +12,6 @@ fi
 
 PS1='[\[\e[0;36m\]\h\[\e[m\] \[\e[0;35m\]\w\[\e[m\]] \[\e[0;32m\]\$\[\e[m\] \[\e[0m\]'
 
+# bash only
 complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
 
-
-
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
