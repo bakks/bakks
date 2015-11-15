@@ -1,5 +1,6 @@
-export PATH=$HOME/bin:$HOME/.rvm/bin:$PATH
 export GOPATH=~/.go
+export GOBIN=$GOPATH/bin
+export PATH=$HOME/bin:$HOME/.rvm/bin:$GOBIN:$PATH
 export HISTCONTROL=ignoredups
 export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
