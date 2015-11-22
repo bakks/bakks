@@ -5,7 +5,7 @@ map n 5k
 map <C-t> <PageDown>
 map <C-n> <PageUp>
 
-map e :tabopen
+map e t
 map u <C-o>
 map U <C-i>
 map h f
