@@ -1,0 +1,15 @@
+set hintkeys=aoeuidhtns
+
+map t 5j
+map n 5k
+map <C-t> <PageDown>
+map <C-n> <PageUp>
+
+map e :tabopen
+map u <C-o>
+map U <C-i>
+map h f
+map H F
+
+map <C-b> gt
+
