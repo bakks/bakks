@@ -8,6 +8,9 @@ set incsearch           " search as we type
 set hlsearch            " highlight search results
 set laststatus=2        " always show status line
 set backspace=indent,eol,start
+filetype plugin on
+set modeline
+set modelines=10
 
 " alt-j and alt-k move the current line up and down
 nnoremap <A-t> :m-2<CR>==
