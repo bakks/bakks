@@ -1,5 +1,8 @@
 set hintkeys=aoeuidhtns
 
+map s n
+map S N
+map d D
 map t 5j
 map n 5k
 map <C-t> <PageDown>
