@@ -1,3 +1,5 @@
+execute pathogen#infect()
+
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
 set smartindent         " do this intelligently for code
@@ -37,6 +39,7 @@ imap <C-h> <Left>
 imap <C-t> <Down>
 imap <C-n> <Up>
 imap <C-s> <Right>
+imap <C-e> <C-x><C-o>
 
 " map control-move chars to 5x
 nmap <C-h> hhhhhhhh
@@ -46,14 +49,14 @@ nmap <C-s> ssssssss
 
 " jump to top
 no j :0<CR>
-" jump to top
+" jump to bottom
 no q :$<CR>
 " replace text
 no m s
 " write file
 nmap k :w<CR>
 " delete newline
-no e :s/\n//<CR>
+no e :s/\n//<CR>:noh<CR>
 
 " save and run make in current dir
 nmap <F5> :w<CR> :! make<CR>
@@ -84,30 +87,9 @@ hi User9 ctermfg=89  ctermbg=89
 
 hi Search  ctermbg=190 ctermfg=27
 
-" function for getting file permissions used in status line
-function! s:Get_file_perm()
-  let a=getfperm(expand('%:p'))
-  return a
-  if strlen(a)
-    return a
-  else
-    let b=printf("%o", xor(0777,system("umask")))
-    let c=""
-    for d in [0, 1, 2]
-      let c.=and(b[d], 4) ? "r" : "-"
-      let c.=and(b[d], 2) ? "w" : "-"
-      let c.=and(b[d], 1) ? "x" : "-"
-    endfor
-    return c
-  endif
-endfunction
-
-let w:file_perm=<sid>Get_file_perm()
-
 " set statusline
 set statusline=
 set statusline+=%1*\%<%F\                 " File+path
-set statusline+=%2*\%{w:file_perm}        " file permissions
 set statusline+=%9*\ %=\                  " filler
 set statusline+=%4*\%m%r%w                " Modified? Readonly?
 set statusline+=%1*\ %l/%L:%02c           " row/total:column
