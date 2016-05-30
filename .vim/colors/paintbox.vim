@@ -42,8 +42,8 @@ hi PreProc    guifg=#bd0d74 guibg=#19191d gui=none term=none cterm=none
 hi Search   guifg=#19191d guibg=#d9c900 gui=none 
 hi Special    guifg=#904ca8 guibg=#19191d gui=none term=none cterm=none
 hi Statement  guifg=#9fc439 guibg=#19191d gui=none term=none cterm=none
-hi StatusLine   guifg=#bd0d74 guibg=#dddddd gui=none term=none cterm=none
-hi StatusLineNC guifg=#dddddd guibg=#585858 gui=none term=none cterm=none
+"hi StatusLine   guifg=#bd0d74 guibg=#dddddd gui=none term=none cterm=none
+"hi StatusLineNC guifg=#dddddd guibg=#585858 gui=none term=none cterm=none
 hi Todo     guifg=#cf310c guibg=#19191d gui=none term=none cterm=none
 hi Type     guifg=#e08a1f guibg=#19191d gui=none term=none cterm=none
 hi Underlined guifg=#dddddd guibg=#19191d gui=underline

@@ -77,28 +77,55 @@ autocmd FileType go setlocal noexpandtab
 " color related lines
 syntax on
 set t_Co=256
+"set background=dark
 colorscheme paintbox
 
 "setup highlighting for status line
-hi User1 ctermfg=190  ctermbg=27
-hi User2 ctermfg=190  ctermbg=62
-hi User3 ctermfg=190  ctermbg=132
-hi User4 ctermfg=190  ctermbg=52
-hi User5 ctermfg=190  ctermbg=54
-hi User9 ctermfg=89  ctermbg=89
-
-hi Search  ctermbg=190 ctermfg=27
+hi User1 ctermfg=6  ctermbg=21
+hi Search ctermbg=190 ctermfg=27
 
 " set statusline
 set statusline=
-set statusline+=%1*\%<%F\                 " File+path
-set statusline+=%9*\ %=\                  " filler
-set statusline+=%4*\%m%r%w                " Modified? Readonly?
-set statusline+=%1*\ %l/%L:%02c           " row/total:column
+set statusline+=%1*\%<%F\              " File+path
+set statusline+=\ %=\               " filler
+set statusline+=%1*\%m%r%w             " Modified? Readonly?
+set statusline+=\ %l/%L:%02c           " row/total:column
+
+" set working directory to git project root
+" or directory of current file if not git project
+" http://inlehmansterms.net/2014/09/04/sane-vim-working-directories/
+function! SetProjectRoot()
+  " default to the current file's directory
+  lcd %:p:h
+  let git_dir = system("git rev-parse --show-toplevel")
+  " See if the command output starts with 'fatal' (if it does, not in a git repo)
+  let is_not_git_dir = matchstr(git_dir, '^fatal:.*')
+  " if git project, change local directory to git project root
+  if empty(is_not_git_dir)
+    lcd `=git_dir`
+  endif
+endfunction
+
+" follow symlinked file
+function! FollowSymlink()
+  let current_file = expand('%:p')
+  " check if file type is a symlink
+  if getftype(current_file) == 'link'
+    " if it is a symlink resolve to the actual file path
+    "   and open the actual file
+    let actual_file = resolve(current_file)
+    silent! execute 'file ' . actual_file
+  end
+endfunction
+
 
 " re-open files at old line
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
+
+  autocmd BufRead *
+    \ call FollowSymlink() |
+    \ call SetProjectRoot()
 endif
 
