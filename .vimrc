@@ -13,16 +13,18 @@ set backspace=indent,eol,start
 filetype plugin on
 set modeline
 set modelines=10
+set cursorline
 
-" alt-j and alt-k move the current line up and down
-nnoremap <A-t> :m-2<CR>==
-nnoremap <A-h> :m+<CR>==
-inoremap <A-t> <Esc>:m-2<CR>==gi
-inoremap <A-h> <Esc>:m+<CR>==gi
-vnoremap <A-t> :m-2<CR>gv=gv
-vnoremap <A-h> :m'>+1<CR>gv=gv
 
 nmap U :redo<CR>
+
+" Pane navigation
+nnoremap <C-m> <C-W><C-J>
+nnoremap <C-w> <C-W><C-K>
+
+" Capital T/N to iterate through search results
+nmap T /<CR>
+nmap N ?<CR>
 
 " dvorak mappings
 nmap h <Left>
