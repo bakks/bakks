@@ -26,7 +26,7 @@ nnoremap <C-w> <C-W><C-K>
 nmap T /<CR>
 nmap N ?<CR>
 
-nmap = :grep -snR // **/*<Left><Left><Left><Left><Left><Left>
+nmap = :grep -siI "" **/*<Left><Left><Left><Left><Left><Left>
 set <M-t>=t
 set <M-n>=n
 nmap <M-t> :cn<CR>
