@@ -1,5 +1,16 @@
 execute pathogen#infect()
 
+" Ctrl-P plugin config
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+" Run :helptags ~/.vim/bundle/ctrlp.vim/doc to install
+
+let g:ctrlp_prompt_mappings = {
+  \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
+  \ 'PrtSelectMove("k")':   ['<c-n>', '<up>'],
+  \ 'PrtHistory(-1)':       [],
+  \ 'AcceptSelection("t")': [],
+  \ }
+
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
 set smartindent         " do this intelligently for code
@@ -27,8 +38,9 @@ nmap T /<CR>
 nmap N ?<CR>
 
 nmap = :grep -siI "" **/*<Left><Left><Left><Left><Left><Left>
-set <M-t>=t
-set <M-n>=n
+"set <M-t>=t
+"set <M-n>=n
+" oaeuaoeu
 nmap <M-t> :cn<CR>
 nmap <M-n> :cp<CR>
 
