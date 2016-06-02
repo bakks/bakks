@@ -25,6 +25,7 @@ filetype plugin on
 set modeline
 set modelines=10
 set cursorline
+set timeout timeoutlen=1 ttimeoutlen=1
 
 
 nmap U :redo<CR>
@@ -38,9 +39,8 @@ nmap T /<CR>
 nmap N ?<CR>
 
 nmap = :grep -siI "" **/*<Left><Left><Left><Left><Left><Left>
-"set <M-t>=t
-"set <M-n>=n
-" oaeuaoeu
+set <M-t>=t
+set <M-n>=n
 nmap <M-t> :cn<CR>
 nmap <M-n> :cp<CR>
 
