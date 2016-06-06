@@ -1,4 +1,4 @@
-execute pathogen#infect()
+"execute pathogen#infect()
 
 " Ctrl-P plugin config
 set runtimepath^=~/.vim/bundle/ctrlp.vim
