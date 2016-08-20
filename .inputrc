@@ -1,3 +1,8 @@
 TAB: menu-complete
 "\C-t": '\C-p'
 
+# map ctrl-h to left arrow
+"\C-h": "[D"
+# map ctrl-w to right arrow
+"\C-w": "[C"
+
