@@ -1,8 +1,5 @@
 "execute pathogen#infect()
 
-" Ctrl-P plugin config
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-" Run :helptags ~/.vim/bundle/ctrlp.vim/doc to install
 
 let g:ctrlp_prompt_mappings = {
   \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
@@ -24,7 +21,7 @@ set backspace=indent,eol,start
 filetype plugin on
 set modeline
 set modelines=10
-set cursorline
+"set cursorline
 set timeout timeoutlen=1 ttimeoutlen=1
 
 
@@ -146,4 +143,17 @@ if has("autocmd")
     \ call FollowSymlink() |
     \ call SetProjectRoot()
 endif
+
+" call to set up for man page viewing
+function! Manpage()
+  if line('$') == 1 | cquit | endif
+  set syntax=man
+  setlocal readonly
+  setlocal nomodifiable
+  noremap q :q!<CR>
+endfunction
+
+" Ctrl-P plugin config
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+" Run :helptags ~/.vim/bundle/ctrlp.vim/doc to install
 
