@@ -156,4 +156,5 @@ endfunction
 " Ctrl-P plugin config
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 " Run :helptags ~/.vim/bundle/ctrlp.vim/doc to install
+set runtimepath^=~/.vim/bundle/vim-go
 
