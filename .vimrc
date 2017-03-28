@@ -36,6 +36,8 @@ nmap T /<CR>
 nmap N ?<CR>
 
 nmap = :grep -siI "" **/*<Left><Left><Left><Left><Left><Left>
+" For these to work in the MacOS terminal you must check the following:
+" Preferences -> Settings -> Keyboard tab -> 'Use option as meta key'
 set <M-t>=t
 set <M-n>=n
 nmap <M-t> :cn<CR>
