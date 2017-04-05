@@ -1,0 +1,18 @@
+[user]
+	name = Peter Bakkum
+	email = peter@quizlet.com
+
+[hub]
+protocol = https
+
+[alias]
+up = !sh -c 'git pull --prune && git submodule update --init --recursive'
+prp = !sh -c 'git pull --rebase && git push'
+gpsu = push -u origin master
+
+
+[diff]
+tool = opendiff
+
+[color]
+ui = true
