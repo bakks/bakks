@@ -8,11 +8,10 @@ protocol = https
 [alias]
 up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
 prp = !sh -c 'git pull --rebase && git push'
-gpsu = !sh -c 'git push 2>&1 | grep "git push" | awk -F"git " "{print $2}" | xargs git'
+gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
 
 [diff]
 tool = opendiff
 
 [color]
 ui = true
-	ui = true
