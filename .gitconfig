@@ -1,17 +1,23 @@
 [user]
 	name = Peter Bakkum
-	email = peter@quizlet.com
+	email = pbbakkum@gmail.com
 
 [hub]
-protocol = https
+  protocol = https
 
 [alias]
-up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
-prp = !sh -c 'git pull --rebase && git push'
-gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
+  up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
+  prp = !sh -c 'git pull --rebase && git push'
+  gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
 
 [diff]
-tool = opendiff
+  tool = opendiff
 
 [color]
-ui = true
+	ui = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
