@@ -74,6 +74,8 @@ no q :$<CR>
 no m s
 " write file
 nmap k :w<CR>
+" reload file
+nmap <C-k> :edit!<CR>
 " delete newline
 no e :s/\n//<CR>:noh<CR>
 
@@ -90,6 +92,7 @@ autocmd FileType make setlocal noexpandtab
 autocmd FileType python setlocal noexpandtab
 autocmd FileType coffee setlocal noexpandtab
 autocmd FileType go setlocal noexpandtab
+autocmd FileType php setlocal noexpandtab
 
 " color related lines
 syntax on
