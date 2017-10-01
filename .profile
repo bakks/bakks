@@ -11,10 +11,6 @@ stty -ixon
 
 alias ls='ls -hl'
 
-if hash git 2>/dev/null; then  # make sure git exists
-  git config --global --add color.ui true
-fi
-
 PS1='[\[\e[0;36m\]\h\[\e[m\] \[\e[0;35m\]\w\[\e[m\]] \[\e[0;32m\]\$\[\e[m\] \[\e[0m\]'
 
 # bash only
