@@ -7,7 +7,7 @@ let g:ctrlp_prompt_mappings = {
   \ 'PrtHistory(-1)':       [],
   \ 'AcceptSelection("t")': [],
   \ }
-let g:ctrlp_custom_ignore = 'vendor'
+let g:ctrlp_custom_ignore = 'vendor\|node_modules'
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
@@ -36,7 +36,7 @@ nnoremap <C-w> <C-W><C-K>
 nmap T /<CR>
 nmap N ?<CR>
 
-nmap = :grep --exclude-dir=vendor -siIR "" .<Left><Left><Left>
+nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules -siIR "" .<Left><Left><Left>
 " For these to work in the MacOS terminal you must check the following:
 " Preferences -> Settings -> Keyboard tab -> 'Use option as meta key'
 set <M-t>=t
