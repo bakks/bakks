@@ -1,4 +1,4 @@
-"execute pathogen#infect()
+execute pathogen#infect()
 
 
 let g:ctrlp_prompt_mappings = {
@@ -8,6 +8,8 @@ let g:ctrlp_prompt_mappings = {
   \ 'AcceptSelection("t")': [],
   \ }
 let g:ctrlp_custom_ignore = 'vendor\|node_modules'
+
+let g:jsx_ext_required = 0
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
