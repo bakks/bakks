@@ -1,6 +1,5 @@
 execute pathogen#infect()
 
-
 let g:ctrlp_prompt_mappings = {
   \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
   \ 'PrtSelectMove("k")':   ['<c-n>', '<up>'],
@@ -10,6 +9,10 @@ let g:ctrlp_prompt_mappings = {
 let g:ctrlp_custom_ignore = 'vendor\|node_modules'
 
 let g:jsx_ext_required = 0
+
+" run Prettier before saving for these file types
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue Prettier
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
@@ -38,7 +41,7 @@ nnoremap <C-w> <C-W><C-K>
 nmap T /<CR>
 nmap N ?<CR>
 
-nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules -siIR "" .<Left><Left><Left>
+nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" -siIR "" .<Left><Left><Left>
 " For these to work in the MacOS terminal you must check the following:
 " Preferences -> Settings -> Keyboard tab -> 'Use option as meta key'
 set <M-t>=t
