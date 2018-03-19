@@ -12,7 +12,7 @@ let g:jsx_ext_required = 0
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue Prettier
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad Prettier
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
