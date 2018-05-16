@@ -41,7 +41,7 @@ nnoremap <C-w> <C-W><C-K>
 nmap T /<CR>
 nmap N ?<CR>
 
-nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" -siIR "" .<Left><Left><Left>
+nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" --exclude-dir="./webclient/static" -siIR "" .<Left><Left><Left>
 " For these to work in the MacOS terminal you must check the following:
 " Preferences -> Settings -> Keyboard tab -> 'Use option as meta key'
 set <M-t>=t
@@ -99,6 +99,8 @@ autocmd FileType python setlocal noexpandtab
 autocmd FileType coffee setlocal noexpandtab
 autocmd FileType go setlocal noexpandtab
 autocmd FileType php setlocal noexpandtab
+
+au BufRead,BufNewFile *.g4 set filetype=antlr4
 
 " color related lines
 syntax on
