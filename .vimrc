@@ -1,4 +1,23 @@
-execute pathogen#infect()
+call plug#begin('~/.vim/bundle')
+Plug 'junegunn/fzf',                { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'w0rp/ale'
+Plug 'fatih/vim-go',                { 'for': 'go' }
+Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
+Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
+call plug#end()
+
+" FZF
+" should configure it to ignore vendor and node_modules
+command! -bang -nargs=? -complete=dir GitFiles
+  \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+nnoremap <C-p> :GitFiles<CR>
+
+let g:fzf_action = {
+      \ 'ctrl-x': 'tab split' }
+let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
 
 let g:ctrlp_prompt_mappings = {
   \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
@@ -7,6 +26,7 @@ let g:ctrlp_prompt_mappings = {
   \ 'AcceptSelection("t")': [],
   \ }
 let g:ctrlp_custom_ignore = 'vendor\|node_modules'
+let g:ctrlp_max_files=0
 
 let g:jsx_ext_required = 0
 
@@ -165,9 +185,4 @@ function! Manpage()
   setlocal nomodifiable
   noremap q :q!<CR>
 endfunction
-
-" Ctrl-P plugin config
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-" Run :helptags ~/.vim/bundle/ctrlp.vim/doc to install
-set runtimepath^=~/.vim/bundle/vim-go
 
