@@ -6,6 +6,7 @@ Plug 'fatih/vim-go',                { 'for': 'go' }
 Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
 Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
+Plug 'vim-ruby/vim-ruby',           { 'for': 'ruby' }
 call plug#end()
 
 " FZF
@@ -20,6 +21,9 @@ let g:fzf_action = {
 let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
 
 let g:jsx_ext_required = 0
+
+let g:ale_open_list = 1
+let g:ale_lint_on_text_changed = 'never'
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
