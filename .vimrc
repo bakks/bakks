@@ -19,15 +19,6 @@ let g:fzf_action = {
       \ 'ctrl-x': 'tab split' }
 let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
 
-let g:ctrlp_prompt_mappings = {
-  \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
-  \ 'PrtSelectMove("k")':   ['<c-n>', '<up>'],
-  \ 'PrtHistory(-1)':       [],
-  \ 'AcceptSelection("t")': [],
-  \ }
-let g:ctrlp_custom_ignore = 'vendor\|node_modules'
-let g:ctrlp_max_files=0
-
 let g:jsx_ext_required = 0
 
 " run Prettier before saving for these file types
