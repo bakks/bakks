@@ -7,6 +7,7 @@ Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
 Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
 Plug 'vim-ruby/vim-ruby',           { 'for': 'ruby' }
+Plug 'derekwyatt/vim-scala',        { 'for': 'scala' }
 call plug#end()
 
 " FZF
