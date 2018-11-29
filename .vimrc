@@ -8,6 +8,7 @@ Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
 Plug 'vim-ruby/vim-ruby',           { 'for': 'ruby' }
 Plug 'derekwyatt/vim-scala',        { 'for': 'scala' }
+Plug 'solarnz/thrift.vim',          { 'for': 'thrift' }
 call plug#end()
 
 " FZF
@@ -31,6 +32,10 @@ let g:ale_linters = {'go': []}
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad Prettier
 
+" Scala formatting
+"autocmd BufWritePost *.scala !./tools/scripts/format_scala.sh %
+command FormatScala !./tools/scripts/format_scala.sh %
+
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
 set smartindent         " do this intelligently for code
@@ -46,6 +51,7 @@ set modeline
 set modelines=10
 "set cursorline
 set timeout timeoutlen=1 ttimeoutlen=1
+set autoread
 
 
 nmap U :redo<CR>
@@ -112,7 +118,7 @@ command -bar Doc set textwidth=80 | set fo+=to
 
 " allow tabs in makefiles and python
 autocmd FileType make setlocal noexpandtab
-autocmd FileType python setlocal noexpandtab
+autocmd FileType python setlocal expandtab
 autocmd FileType coffee setlocal noexpandtab
 autocmd FileType go setlocal noexpandtab
 autocmd FileType php setlocal noexpandtab

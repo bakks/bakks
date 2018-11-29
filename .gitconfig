@@ -1,23 +1,25 @@
+# Please indent options with one tab when editing defaults in
+# https://github.com/stripe-internal/marionette-puppet-config/blob/master/modules/git/templates/gitconfig.erb
+# That matches how "git config --global" edits the file.
+
 [user]
 	name = Peter Bakkum
-	email = pbbakkum@gmail.com
+	email = pbakkum@stripe.com
 
-[hub]
-  protocol = https
+[push]
+        default = simple
+
+# http://stackoverflow.com/questions/18257622/why-is-git-core-preloadindex-default-value-false
+[core]
+        preloadindex = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 
 [alias]
   up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
   prp = !sh -c 'git pull --rebase && git push'
   gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
 
-[diff]
-  tool = opendiff
-
-[color]
-	ui = true
-
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
