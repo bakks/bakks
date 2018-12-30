@@ -26,7 +26,7 @@ let g:jsx_ext_required = 0
 
 let g:ale_open_list = 1
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_linters = {'go': []}
+let g:ale_linters = {'go': [], 'javascript': []}
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
