@@ -11,7 +11,7 @@ stty -ixon
 
 alias ls='ls -hl'
 
-PS1='[\[\e[0;36m\]\h\[\e[m\] \[\e[0;35m\]\w\[\e[m\]] \[\e[0;32m\]\$\[\e[m\] \[\e[0m\]'
+PS1='\[\e[0;35m\]\w\[\e[m\] \[\e[0;32m\]ᐅ\[\e[m\] \[\e[0m\]'
 
 # bash only
 complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
