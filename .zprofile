@@ -21,3 +21,8 @@ if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-c
 PS1="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
 export PROFILE="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
 
+bindkey "^t" up-line-or-history
+bindkey "^n" down-line-or-history
+bindkey "^s" forward-char
+bindkey "^h" backward-char
+
