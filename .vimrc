@@ -52,6 +52,7 @@ set modelines=10
 "set cursorline
 set timeout timeoutlen=1 ttimeoutlen=1
 set autoread
+set backupcopy=yes      " gets around entr running twice
 
 
 nmap U :redo<CR>
@@ -129,11 +130,11 @@ au BufRead,BufNewFile *.g4 set filetype=antlr4
 syntax on
 set t_Co=256
 "set background=dark
-colorscheme paintbox
+colorscheme monokai
 
 "setup highlighting for status line
-hi User1 ctermfg=6  ctermbg=21
-hi Search ctermbg=190 ctermfg=27
+hi User1 ctermfg=DarkBlue  ctermbg=LightMagenta
+"hi Search ctermbg=190 ctermfg=27
 
 " set statusline
 set statusline=
