@@ -1,4 +1,8 @@
-# [Dotfiles for Peter Bakkum](https://github.com/bakks/bakks)
+# Dotfiles for Peter Bakkum
+
+Configured for Dvorak keyboard layout
+
+https://github.com/bakks/bakks
 
 ## Keyboard Cheat Sheet
 
@@ -12,8 +16,11 @@
 **C-x**
 : Previous pane
 
+**C-g**
+: New pane split horizontally
+
 **C-d g**
-: New pane
+: New pane split vertically
 
 **C-f**
 : Next pane layout
@@ -41,3 +48,40 @@
 
 **C-d r**
 : Reload tmux configuration
+
+**C-u**
+: Enter copy mode
+
+#### Copy mode
+
+Allows you to manipulate the text of a tmux pane.
+
+**H**
+: Cursor left
+
+**T**
+: Cursor down
+
+**N**
+: Cursor up
+
+**S**
+: Cursor right
+
+**t**
+: Scroll down
+
+**n**
+: Scroll up
+
+**C-t**
+: Page down
+
+**C-n**
+: Page up
+
+**V / C-v**
+: Select text
+
+**y / Y**
+: Copy selected text
