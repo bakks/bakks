@@ -217,7 +217,7 @@ Allows you to manipulate the text of a tmux pane.
 **C-p**
 : Open fzf file finder
 
-**C-P**
+**P**
 : Open file tree (nvim-tree.lua)
 
 #### nvim-tree
@@ -225,8 +225,17 @@ Allows you to manipulate the text of a tmux pane.
 **o**
 : Open selected file
 
-**C-t**
+**O**
 : Open file in new tab
+
+**<Tab>**
+: Preview file
+
+**t / <C-t>**
+: Next file
+
+**<C-n>**
+: Go to parent
 
 **s**
 : Open file with system default program
