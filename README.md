@@ -11,6 +11,11 @@ Current setup:
 * Window manager: tmux
 * Editor: neovim
 
+```
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font
+```
+
 ## Keyboard Cheat Sheet
 
 ### kitty
@@ -158,14 +163,44 @@ Allows you to manipulate the text of a tmux pane.
 **U**
 : Re-do
 
+**.**
+: Repeat last action
+
+**dd**
+: Delete current line
+
+**i**
+: Enter insert mode
+
+**I**
+: Enter insert mode at beginning of line
+
 **k**
 : Write file
 
-**C-k**
+**r**
+: Insert a single character ot current location
+
+**C-r**
 : Reload file
+
+**C-R**
+: Reload vim config
+
+**o**
+: Add newline and enter insert mode
 
 **e**
 : Delete newline at end of current line
+
+**m**
+: Delete selected text and enter insert mode
+
+**C-a**
+: Jump to beginning of line
+
+**C-e**
+: Jump to end of line
 
 **T**
 : Next search result
@@ -178,3 +213,38 @@ Allows you to manipulate the text of a tmux pane.
 
 **=**
 : Grep in local directory
+
+**C-p**
+: Open fzf file finder
+
+**C-P**
+: Open file tree (nvim-tree.lua)
+
+#### nvim-tree
+
+**o**
+: Open selected file
+
+**C-t**
+: Open file in new tab
+
+**s**
+: Open file with system default program
+
+**R**
+: Refresh file tree
+
+**a**
+: New file
+
+**r**
+: Rename
+
+**y**
+: Copy name
+
+**Y**
+: Copy path
+
+**gy**
+: Copy absolute path

@@ -11,10 +11,11 @@ unlet autoload_plug_path
 call plug#begin(stdpath('config') . '/plugged')
 
 " plugins here ...
-Plug 'scrooloose/nerdtree'
-Plug 'junegunn/fzf',                { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf',                { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'fatih/vim-go',                { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
 Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
@@ -49,6 +50,23 @@ lua << END
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua" }
+}
+
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- you can specify color or cterm_color instead of specifying both of them
+ -- DevIcon will be appended to `name`
+ override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    cterm_color = "65",
+    name = "Zsh"
+  }
+ };
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
 }
 END
 
@@ -126,14 +144,24 @@ no m s
 " write file
 nmap k :w<CR>
 " reload file
-nmap <C-k> :edit!<CR>
+nmap <C-r> :edit!<2R>
 " delete newline
 no e :s/\n//<CR>:noh<CR>
+" jump to end of line
+nmap <C-e> $
+" jump to beginning of line
+nmap <C-a> 0
+" reload vim config
+nmap ; :source ~/.config/nvim/init.vim<CR>
 
 " save and run make in current dir
 nmap <F5> :w<CR> :! make<CR>
 " kill trailing whitespace
 nmap - :%s/\s\+$//<CR>
+
+nmap P :NvimTreeToggle<CR>
+vmap P :NvimTreeToggle<CR>
+nnoremap <leader>P :NvimTreeToggle<CR>
 
 " insert new line at 80 characters with :Doc
 command -bar Doc set textwidth=80 | set fo+=to
