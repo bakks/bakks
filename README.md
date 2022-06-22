@@ -133,3 +133,48 @@ Allows you to manipulate the text of a tmux pane.
 
 **s**
 : Cursor left
+
+**C-h**
+: Cursor left x12
+
+**C-t**
+: Cursor down x8
+
+**C-n**
+: Cursor up x8
+
+**C-s**
+: Cursor right x12
+
+**j**
+: Jump to top of file
+
+**q**
+: Jump to bottom of file
+
+**u**
+: Un-do
+
+**U**
+: Re-do
+
+**k**
+: Write file
+
+**C-k**
+: Reload file
+
+**e**
+: Delete newline at end of current line
+
+**T**
+: Next search result
+
+**N**
+: Previous search result
+
+**-**
+: Delete trailing whitespace throughout file
+
+**=**
+: Grep in local directory
