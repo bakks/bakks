@@ -1,10 +1,42 @@
 # Dotfiles for Peter Bakkum
 
-Configured for Dvorak keyboard layout
-
 https://github.com/bakks/bakks
 
+Configured for Dvorak keyboard layout.
+
+Current setup:
+
+* Terminal: kitty
+* Shell: zsh
+* Window manager: tmux
+* Editor: neovim
+
 ## Keyboard Cheat Sheet
+
+### kitty
+
+**C-,**
+: Open kitty config
+
+**C-⌘-,**
+: Reload kitty config
+
+**⌥-⌘-,**
+: Show current kitty config
+
+### zsh
+
+**C-t**
+: Previous history item
+
+**C-n**
+: Next history item
+
+**C-h**
+: Cursor left
+
+**C-s**
+: Cursor right
 
 ### tmux
 
@@ -85,3 +117,19 @@ Allows you to manipulate the text of a tmux pane.
 
 **y / Y**
 : Copy selected text
+
+### neovim
+
+#### Normal mode
+
+**h**
+: Cursor left
+
+**t**
+: Cursor down
+
+**n**
+: Cursor up
+
+**s**
+: Cursor left

@@ -15,10 +15,12 @@ Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf',                { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
-Plug 'fatih/vim-go',                { 'for': 'go' }
+Plug 'fatih/vim-go',                { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
 Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 call plug#helptags()
 
@@ -42,6 +44,17 @@ let g:jsx_ext_required = 0
 let g:ale_open_list = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_linters = {'go': [], 'javascript': []}
+
+lua << END
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua" }
+}
+END
+
+" turn off some go-vim functionality
+let g:go_def_mapping_enabled = 0
+let g:go_textobj_enabled = 0
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
@@ -94,13 +107,15 @@ imap <C-h> <Left>
 imap <C-t> <Down>
 imap <C-n> <Up>
 imap <C-s> <Right>
+imap » <Right>
 imap <C-e> <C-x><C-o>
 
 " map control-move chars to 5x
-nmap <C-h> hhhhhhhh
+nmap <C-h> hhhhhhhhhhhh
 nmap <C-t> tttttttt
 nmap <C-n> nnnnnnnn
-nmap <C-s> ssssssss
+nmap <C-s> ssssssssssss
+nmap » ssssssssssss
 
 " jump to top
 no j :0<CR>
@@ -184,13 +199,4 @@ if has("autocmd")
     \ call FollowSymlink() |
     \ call SetProjectRoot()
 endif
-
-" call to set up for man page viewing
-function! Manpage()
-  if line('$') == 1 | cquit | endif
-  set syntax=man
-  setlocal readonly
-  setlocal nomodifiable
-  noremap q :q!<CR>
-endfunction
 

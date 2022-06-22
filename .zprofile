@@ -23,6 +23,7 @@ export PROFILE="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
 
 bindkey "^t" up-line-or-history
 bindkey "^n" down-line-or-history
-bindkey "^s" forward-char
 bindkey "^h" backward-char
+bindkey "^s" forward-char
+bindkey "»" forward-char
 
