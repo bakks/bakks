@@ -10,6 +10,9 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 #stty -ixon
 
 alias ls='ls -hl'
+alias vim="nvim"
+
+setopt share_history
 
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -20,6 +23,8 @@ if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-c
 
 PS1="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
 export PROFILE="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
+
+export FZF_CTRL_R_OPTS="--bind=ctrl-t:down,ctrl-n:up"
 
 bindkey "^t" up-line-or-history
 bindkey "^n" down-line-or-history

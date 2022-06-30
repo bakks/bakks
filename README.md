@@ -12,6 +12,7 @@ Current setup:
 * Editor: neovim
 
 ```
+brew install tmux nvim fzf
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
 ```
