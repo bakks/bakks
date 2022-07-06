@@ -180,12 +180,12 @@ Allows you to manipulate the text of a tmux pane.
 : Write file
 
 **r**
-: Insert a single character ot current location
+: Insert a single character at current location
 
 **C-r**
 : Reload file
 
-**C-R**
+**;**
 : Reload vim config
 
 **o**
@@ -220,6 +220,18 @@ Allows you to manipulate the text of a tmux pane.
 
 **P**
 : Open file tree (nvim-tree.lua)
+
+**zR**
+: Unfold all
+
+**B**
+: Next tab
+
+**[0-9]B**
+: Go to numbered tab
+
+**M**
+: Previous tab
 
 #### nvim-tree
 

@@ -1,4 +1,8 @@
-" auto install vim-plug and plugins:
+" ========================
+" Import Plugins
+" ========================
+
+" auto install vim-plug and plugins
 let plug_install = 0
 let autoload_plug_path = stdpath('config') . '/autoload/plug.vim'
 if !filereadable(autoload_plug_path)
@@ -22,6 +26,7 @@ Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'mhinz/vim-startify'
 call plug#end()
 call plug#helptags()
 
@@ -31,7 +36,9 @@ if plug_install
 endif
 unlet plug_install
 
-" --------------- config
+" ========================
+" Plugin Configuration
+" ========================
 
 " Control-P opens FZF finder that ignores .gitignore files
 nnoremap <C-p> :GitFiles<CR>
@@ -49,7 +56,10 @@ let g:ale_linters = {'go': [], 'javascript': []}
 lua << END
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua" }
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua" },
+  highlight = {
+    enable = true,
+  },
 }
 
 require'nvim-web-devicons'.setup {
@@ -70,13 +80,23 @@ require'nvim-web-devicons'.setup {
 }
 END
 
-" turn off some go-vim functionality
-let g:go_def_mapping_enabled = 0
-let g:go_textobj_enabled = 0
-
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad Prettier
+
+"au FileType go nnoremap <silent> cd <Plug>(go-def-tab)
+"au FileType go nmap gd <Plug>(go-def)
+
+" turn off some go-vim functionality
+let g:go_def_mapping_enabled = 0
+let g:go_textobj_enabled = 0
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+
+" ========================
+" Basic Neovim Configuration
+" ========================
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
@@ -91,11 +111,36 @@ set backspace=indent,eol,start
 filetype plugin on
 set modeline
 set modelines=10
-set timeout timeoutlen=1 ttimeoutlen=1
+set timeout timeoutlen=1000 ttimeoutlen=1000
 set autoread
 set backupcopy=yes      " gets around entr running twice
 
+" insert new line at 80 characters with :Doc
+command -bar Doc set textwidth=80 | set fo+=to
 
+" allow tabs in makefiles and python
+autocmd FileType make setlocal noexpandtab
+autocmd FileType python setlocal expandtab
+autocmd FileType coffee setlocal noexpandtab
+autocmd FileType php setlocal noexpandtab
+
+au BufRead,BufNewFile *.g4 set filetype=antlr4
+
+" set statusline
+set statusline=
+set statusline+=%1*\%<%F\              " File+path
+set statusline+=\ %=\                  " filler
+set statusline+=%1*\%m%r%w             " Modified? Readonly?
+set statusline+=\ %l/%L:%02c           " row/total:column
+
+
+" ========================
+" Basic Key Bindings
+" ========================
+"
+let g:mapleader="c"
+
+" U to redo
 nmap U :redo<CR>
 
 " Pane navigation
@@ -110,7 +155,7 @@ nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".nex
 nmap <M-t> :cn<CR>
 nmap <M-n> :cp<CR>
 
-" dvorak mappings
+" dvorak movement mappings
 nmap h <Left>
 nmap t <Down>
 nmap n <Up>
@@ -134,6 +179,18 @@ nmap <C-t> tttttttt
 nmap <C-n> nnnnnnnn
 nmap <C-s> ssssssssssss
 nmap » ssssssssssss
+imap <C-h> hhhhhhhhhhhh
+imap <C-t> tttttttt
+imap <C-n> nnnnnnnn
+imap » ssssssssssss
+vmap <C-h> hhhhhhhhhhhh
+vmap <C-t> tttttttt
+vmap <C-n> nnnnnnnn
+vmap » ssssssssssss
+
+" tab controls
+nmap B gt
+nmap M gT
 
 " jump to top
 no j :0<CR>
@@ -144,7 +201,7 @@ no m s
 " write file
 nmap k :w<CR>
 " reload file
-nmap <C-r> :edit!<2R>
+nmap <C-r> :edit!<CR>
 " delete newline
 no e :s/\n//<CR>:noh<CR>
 " jump to end of line
@@ -159,22 +216,18 @@ nmap <F5> :w<CR> :! make<CR>
 " kill trailing whitespace
 nmap - :%s/\s\+$//<CR>
 
-nmap P :NvimTreeToggle<CR>
-vmap P :NvimTreeToggle<CR>
-nnoremap <leader>P :NvimTreeToggle<CR>
+" ========================
+" Plugin Key Bindings
+" ========================
 
-" insert new line at 80 characters with :Doc
-command -bar Doc set textwidth=80 | set fo+=to
+nmap <silent> P :NvimTreeToggle<CR>
+vmap <silent> P :NvimTreeToggle<CR>
+nmap <silent> <leader>d <Plug>(go-def-tab)
 
-" allow tabs in makefiles and python
-autocmd FileType make setlocal noexpandtab
-autocmd FileType python setlocal expandtab
-autocmd FileType coffee setlocal noexpandtab
-autocmd FileType php setlocal noexpandtab
+" ========================
+" Color Scheme
+" ========================
 
-au BufRead,BufNewFile *.g4 set filetype=antlr4
-
-" color related lines
 syntax on
 set t_Co=256
 colorscheme monokai
@@ -183,12 +236,9 @@ hi Normal ctermbg=233  " darken background a bit
 "setup highlighting for status line
 hi User1 ctermfg=DarkBlue  ctermbg=LightMagenta
 
-" set statusline
-set statusline=
-set statusline+=%1*\%<%F\              " File+path
-set statusline+=\ %=\                  " filler
-set statusline+=%1*\%m%r%w             " Modified? Readonly?
-set statusline+=\ %l/%L:%02c           " row/total:column
+" ========================
+" Re-Open files at old line
+" ========================
 
 " set working directory to git project root
 " or directory of current file if not git project
