@@ -6,15 +6,28 @@ Configured for Dvorak keyboard layout.
 
 Current setup:
 
-* Terminal: kitty
-* Shell: zsh
-* Window manager: tmux
-* Editor: neovim
+- Terminal: kitty
+- Shell: zsh
+- Window manager: tmux
+- Editor: neovim
 
 ```
-brew install tmux nvim fzf
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
+brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
+
+gh auth login
+
+cd ~
+gh repo clone bakks/bakks
+rsync -a bakks/ ./
+rm -rf bakks/
 ```
 
 ## Keyboard Cheat Sheet
