@@ -28,6 +28,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'mhinz/vim-startify'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 call plug#end()
 call plug#helptags()
 
@@ -100,16 +101,11 @@ local on_attach = function(client, bufnr)
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
   vim.keymap.set('n', 'cD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'cd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'ck', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'ci', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', 'cs', vim.lsp.buf.signature_help, bufopts)
---  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
---  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
---  vim.keymap.set('n', '<space>wl', function()
---    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
---  end, bufopts)
   vim.keymap.set('n', 'ctd', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', 'crn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', 'cR', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', 'cca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'cr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'cf', vim.lsp.buf.formatting, bufopts)
@@ -156,6 +152,31 @@ for _, lsp in ipairs(servers) do
     flags = lsp_flags,
   }))
 end
+
+-- Override definition handler so that we can open in a new tab
+vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
+  local client_encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
+  if err then
+    vim.notify(err.message)
+    return
+  end
+  if result == nil then
+    vim.notify("Location not found")
+    return
+  end
+  vim.api.nvim_command('tabnew')
+
+  if vim.tbl_islist(result) and result[1] then
+    vim.lsp.util.jump_to_location(result[1], client_encoding)
+
+    if #result > 1 then
+      vim.fn.setqflist(vim.lsp.util.locations_to_items(result, client_encoding))
+      vim.api.nvim_command("copen")
+    end
+  else
+    vim.lsp.util.jump_to_location(result, client_encoding)
+  end
+end
 END
 
 " run Prettier before saving for these file types
@@ -167,9 +188,8 @@ let g:go_def_mapping_enabled = 0
 let g:go_textobj_enabled = 0
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
-
-let g:go_fmt_fail_silently = 0
 let g:go_fmt_command = 'gopls'
+let g:go_fmt_fail_silently = 0
 let g:go_autodetect_gopath = 1
 let g:go_term_enabled = 1
 let g:go_highlight_space_tab_error = 1
@@ -181,9 +201,9 @@ let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
 
 
-" ========================
+" ==========================
 " Basic Neovim Configuration
-" ========================
+" ==========================
 
 set nocompatible        " no vi shit
 set autoindent          " auto indent next line
@@ -303,6 +323,7 @@ nmap - :%s/\s\+$//<CR>
 
 nmap <silent> P :NvimTreeToggle<CR>
 vmap <silent> P :NvimTreeToggle<CR>
+" Turning these off in favor of LSP
 "au filetype go nmap <silent> <leader>d <Plug>(go-def-tab)
 "au filetype go nmap <leader>g :GoInfo<CR>
 "au filetype go nmap <leader>r :GoReferrers<CR>
@@ -319,39 +340,10 @@ hi Normal ctermbg=233  " darken background a bit
 "setup highlighting for status line
 hi User1 ctermfg=DarkBlue  ctermbg=LightMagenta
 
-let s:gray1     = '#1b202a'
-let s:gray2     = '#232936'
-let s:gray3     = '#323c4d'
-let s:gray4     = '#51617d'
-let s:gray5     = '#9aa7bd'
-let s:red       = '#b15e7c'
-let s:green     = '#709d6c'
-let s:yellow    = '#b5a262'
-let s:blue      = '#608cc3'
-let s:purple    = '#8f72bf'
-let s:cyan      = '#56adb7'
-let s:orange    = '#b3785d'
-let s:pink      = '#c47ebd'
-
-function! s:HL(group, fg, bg, attr)
-  let l:attr = a:attr
-
-  if !empty(a:fg)
-      exec 'hi ' . a:group . ' guifg=' . a:fg
-  endif
-  if !empty(a:bg)
-      exec 'hi ' . a:group . ' guibg=' . a:bg
-  endif
-  if !empty(a:attr)
-      exec 'hi ' . a:group . ' gui=' . l:attr . ' cterm=' . l:attr
-  endif
-endfun
-
-" call s:HL('Pmenu',                          s:gray5,    s:green,    '')
-" call s:HL('PmenuSel',                       s:gray2,    s:blue,     '')
-" call s:HL('PmenuSbar',                      s:gray3,    s:gray4,    '')
-" call s:HL('PmenuThumb',                     s:gray4,    s:gray5,    '')
-hi Pmenu ctermbg=LightMagenta
+hi Pmenu ctermfg=231 ctermbg=17 cterm=NONE
+hi PmenuSel ctermfg=236 ctermbg=186 cterm=NONE
+hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
+hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " ========================
 " Re-Open files at old line

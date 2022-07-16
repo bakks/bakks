@@ -246,6 +246,26 @@ Allows you to manipulate the text of a tmux pane.
 **M**
 : Previous tab
 
+##### Autocompletion
+
+**cd**
+: Go to definiton
+
+**cD**
+: Go to declaration
+
+**ck**
+: Show definition in hover window
+
+**ci**
+: Go to implementation
+
+**cr**
+: Show references
+
+**cR**
+: Rename current symbol
+
 #### nvim-tree
 
 **o**
