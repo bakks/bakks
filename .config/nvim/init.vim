@@ -218,7 +218,7 @@ set backspace=indent,eol,start
 filetype plugin on
 set modeline
 set modelines=10
-set timeout timeoutlen=1000 ttimeoutlen=1000
+set timeout timeoutlen=400 ttimeoutlen=400
 set autoread
 set backupcopy=yes      " gets around entr running twice
 
