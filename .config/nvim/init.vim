@@ -181,6 +181,13 @@ vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
     vim.lsp.util.jump_to_location(result, client_encoding)
   end
 end
+
+-- Configure diagnostics
+-- Turn off left bar signs
+vim.diagnostic.config({ signs = false })
+-- Show full description in window on hover
+vim.o.updatetime = 250
+vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 END
 
 " run Prettier before saving for these file types
