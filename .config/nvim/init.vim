@@ -85,10 +85,7 @@ require'nvim-web-devicons'.setup {
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', 'ce', vim.diagnostic.open_float, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -186,8 +183,8 @@ end
 -- Turn off left bar signs
 vim.diagnostic.config({ signs = false })
 -- Show full description in window on hover
-vim.o.updatetime = 250
-vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+--vim.o.updatetime = 250
+--vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 END
 
 " run Prettier before saving for these file types
@@ -336,7 +333,7 @@ nmap <silent> P :NvimTreeToggle<CR>
 vmap <silent> P :NvimTreeToggle<CR>
 " Turning these off in favor of LSP
 "au filetype go nmap <silent> <leader>d <Plug>(go-def-tab)
-"au filetype go nmap <leader>g :GoInfo<CR>
+nmap cu :GoInfo<CR>
 "au filetype go nmap <leader>r :GoReferrers<CR>
 
 " ========================

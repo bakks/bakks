@@ -18,7 +18,7 @@ Current setup:
 # Install kitty
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
-brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace
+brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
 
@@ -246,7 +246,7 @@ Allows you to manipulate the text of a tmux pane.
 **M**
 : Previous tab
 
-##### Autocompletion
+#### LSP / Autocompletion
 
 **cd**
 : Go to definiton
@@ -265,6 +265,9 @@ Allows you to manipulate the text of a tmux pane.
 
 **cR**
 : Rename current symbol
+
+**<tab>**
+: Select next autocompletion result
 
 #### nvim-tree
 
