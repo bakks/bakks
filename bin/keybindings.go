@@ -63,7 +63,7 @@ func printTitle(title string) {
 }
 
 func printKeyBinding(keyCombo, definition string) {
-	fmt.Printf("%s%-6s   %s%s%s\n", CYAN, keyCombo, RED, definition, WHITE)
+	fmt.Printf("%s%-6s %s%s%s\n", CYAN, keyCombo, RED, definition, WHITE)
 }
 
 func reformatKeys(lines []string) {
@@ -74,7 +74,7 @@ func reformatKeys(lines []string) {
 	}
 
 	if i == len(lines) {
-		panic(fmt.Sprintf("Could not find starting line \"%s\" in %s\n", SEARCH_LINE, FILENAME))
+		log.Fatal(fmt.Sprintf("Could not find starting line \"%s\" in %s\n", SEARCH_LINE, FILENAME))
 	}
 
 	indent := -1
