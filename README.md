@@ -21,6 +21,7 @@ curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
+npm install -g typescript typescript-language-server
 
 gh auth login
 
