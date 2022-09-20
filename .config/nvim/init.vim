@@ -125,7 +125,7 @@ vim.g.coq_settings = {
 
   clients = {
     tabnine = {
-      enabled = true,
+      enabled = false,
     }
   },
 

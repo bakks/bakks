@@ -31,6 +31,12 @@ rsync -a bakks/ ./
 rm -rf bakks/
 ```
 
+## To do
+
+- Moving cursor left/right when in the command mode (e.g. activate by renaming `cR`)
+- Move to next or previous LSP error
+- Add karabiner config info here
+
 ## Keyboard Cheat Sheet
 
 ### kitty
