@@ -2,6 +2,11 @@
 " Import Plugins
 " ========================
 
+" Debugging plugins: run the following commands
+" PlugInstall
+" PlugUpdate
+" TSUpdate
+
 " auto install vim-plug and plugins
 let plug_install = 0
 let autoload_plug_path = stdpath('config') . '/autoload/plug.vim'
@@ -58,7 +63,7 @@ let g:ale_linters = {'go': [], 'javascript': []}
 lua << END
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua" },
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python" },
   highlight = {
     enable = true,
   },
