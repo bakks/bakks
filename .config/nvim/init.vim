@@ -106,11 +106,13 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'ck', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'ci', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', 'cs', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', 'ctd', vim.lsp.buf.type_definition, bufopts)
+  -- vim.keymap.set('n', 'ctd', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'cR', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', 'cca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'cr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'cf', vim.lsp.buf.formatting, bufopts)
+  vim.keymap.set('n', 'ct', vim.diagnostic.goto_next, bufopts)
+  vim.keymap.set('n', 'cn', vim.diagnostic.goto_prev, bufopts)
 end
 
 local lsp_flags = {
