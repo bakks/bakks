@@ -18,7 +18,7 @@ Current setup:
 # Install kitty
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
-brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils poetry
+brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils poetry wget
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
 brew install bakks/bakks/poptop
