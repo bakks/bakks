@@ -32,8 +32,9 @@ Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'mhinz/vim-startify'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq_nvim',             { 'branch': 'coq' }
+Plug 'ms-jpq/coq.artifacts',        { 'branch': 'artifacts' }
+Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
 call plug#end()
 call plug#helptags()
 
@@ -92,6 +93,10 @@ require'nvim-web-devicons'.setup {
 local opts = { noremap=true, silent=true }
 vim.keymap.set('n', 'ce', vim.diagnostic.open_float, opts)
 
+local getdef = function()
+  vim.lsp.buf.definition({ reuse_win=true })
+end
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -126,8 +131,13 @@ local lspconfig = require('lspconfig')
 vim.g.coq_settings = {
   auto_start = 'shut-up',
 
+  completion = {
+    always = false,
+  },
+
   keymap = {
     jump_to_mark = '',
+    recommended = false,
   },
 
   clients = {
@@ -161,7 +171,17 @@ for _, lsp in ipairs(servers) do
   }))
 end
 
--- Override definition handler so that we can open in a new tab
+local function bufwinid(bufnr)
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(win) == bufnr then
+      return win
+    end
+  end
+end
+
+-- This is hacked scripting to get LSP go-to-definition
+-- to use tabs that are already open, and otherwise open a 
+-- new one. Can probably be simplified.
 vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
   local client_encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
   if err then
@@ -172,17 +192,24 @@ vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
     vim.notify("Location not found")
     return
   end
-  vim.api.nvim_command('tabnew')
+
+  local uri = result.uri or result.targetUri or result[1].uri or result[1].targetUri
+  if uri == nil then
+    return false
+  end
+  local bufnr = vim.uri_to_bufnr(uri)
+  local win = bufwinid(bufnr)
+    or vim.api.nvim_command('tabnew')
 
   if vim.tbl_islist(result) and result[1] then
-    vim.lsp.util.jump_to_location(result[1], client_encoding)
+    vim.lsp.util.jump_to_location(result[1], client_encoding, true)
 
     if #result > 1 then
       vim.fn.setqflist(vim.lsp.util.locations_to_items(result, client_encoding))
       vim.api.nvim_command("copen")
     end
   else
-    vim.lsp.util.jump_to_location(result, client_encoding)
+    vim.lsp.util.jump_to_location(result, client_encoding, true)
   end
 end
 
@@ -193,6 +220,7 @@ vim.diagnostic.config({ signs = false })
 --vim.o.updatetime = 250
 --vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 END
+
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
@@ -215,6 +243,11 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
 
+" Github copilot
+
+let g:copilot_node_command = "/usr/local/Cellar/node@16/16.18.1/bin/node"
+
+nmap ll :Copilot panel<CR>
 
 " ==========================
 " Basic Neovim Configuration
