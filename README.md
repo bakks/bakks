@@ -15,17 +15,18 @@ Current setup:
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install kitty
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-
-brew install node tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils poetry wget
-brew tap homebrew/cask-fonts
-brew install --cask font-hack-nerd-font
+# Brew packages
+# node@16 is necessary because Github Copilot vim plugin currently requires 12.x-17.x
+brew install node@16 tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils poetry wget kitty
+brew install homebrew/cask-fonts/font-hack-nerd-font
 brew install bakks/bakks/poptop
+
+# npm packages
 npm install -g typescript typescript-language-server pyright
 
 gh auth login
 
+# Populate the homedir with this repo's contents
 cd ~
 gh repo clone bakks/bakks
 rsync -a bakks/ ./
