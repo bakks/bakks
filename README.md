@@ -246,14 +246,17 @@ Allows you to manipulate the text of a tmux pane.
 **zR**
 : Unfold all
 
-**B**
-: Next tab
-
 **[0-9]B**
 : Go to numbered tab
 
+**B**
+: Next tab
+
 **M**
 : Previous tab
+
+**Q**
+: Quit file
 
 #### LSP / Autocompletion
 

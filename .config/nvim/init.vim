@@ -365,6 +365,8 @@ nmap <F5> :w<CR> :! make<CR>
 " kill trailing whitespace
 nmap - :%s/\s\+$//<CR>
 
+nmap Q :q<CR>
+
 " ========================
 " Plugin Key Bindings
 " ========================
@@ -384,6 +386,9 @@ syntax on
 set t_Co=256
 colorscheme monokai
 hi Normal ctermbg=233  " darken background a bit
+
+set colorcolumn=80
+hi ColorColumn ctermbg=16
 
 "setup highlighting for status line
 hi User1 ctermfg=DarkBlue  ctermbg=LightMagenta
