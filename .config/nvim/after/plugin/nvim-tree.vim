@@ -21,16 +21,22 @@ require("nvim-tree").setup({
     }
   },
   view = {
+    side = "right",
     mappings = {
       custom_only = false,
       list = {
         { key = "P", action = "close" },
         { key = "<Esc>", action = "close" },
-        { key = "o", action = "edit_no_picker" },
-        { key = "O", action = "tabnew" },
+        { key = "O", action = "edit_no_picker" },
+        { key = "o", action = "tabnew" },
         { key = "<C-t>", action = "next_sibling" },
         { key = "<C-n>", action = "parent_node" },
       },
+    },
+  },
+  actions = {
+    open_file = {
+      quit_on_open = true,
     },
   },
 })
