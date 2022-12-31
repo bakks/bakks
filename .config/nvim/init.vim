@@ -48,9 +48,6 @@ unlet plug_install
 " Plugin Configuration
 " ========================
 
-" Control-P opens FZF finder that ignores .gitignore files
-nnoremap <C-p> :GitFiles<CR>
-
 let g:fzf_action = {
       \ 'ctrl-x': 'tab split' }
 let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
@@ -127,7 +124,7 @@ local lsp_flags = {
 
 local lspconfig = require('lspconfig')
 
--- Automatically start coq
+-- COQ (autocompletion) settings
 vim.g.coq_settings = {
   auto_start = 'shut-up',
 
@@ -138,6 +135,7 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = '',
     recommended = false,
+    manual_complete = 'ce',
   },
 
   clients = {
@@ -219,6 +217,7 @@ vim.diagnostic.config({ signs = false })
 -- Show full description in window on hover
 --vim.o.updatetime = 250
 --vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+
 END
 
 
@@ -377,6 +376,9 @@ vmap <silent> P :NvimTreeToggle<CR>
 "au filetype go nmap <silent> <leader>d <Plug>(go-def-tab)
 nmap cu :GoInfo<CR>
 "au filetype go nmap <leader>r :GoReferrers<CR>
+
+" Control-P opens FZF finder that ignores .gitignore files
+nnoremap <C-p> :GitFiles<CR>
 
 " ========================
 " Color Scheme

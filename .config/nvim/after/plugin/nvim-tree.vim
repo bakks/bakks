@@ -29,6 +29,7 @@ require("nvim-tree").setup({
         { key = "<Esc>", action = "close" },
         { key = "O", action = "edit_no_picker" },
         { key = "o", action = "tabnew" },
+        { key = "<CR>", action = "tabnew" },
         { key = "<C-t>", action = "next_sibling" },
         { key = "<C-n>", action = "parent_node" },
       },
