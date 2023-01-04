@@ -22,7 +22,6 @@ call plug#begin(stdpath('config') . '/plugged')
 " plugins here ...
 Plug 'junegunn/fzf',                { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-"Plug 'w0rp/ale'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'fatih/vim-go',                { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -48,15 +47,10 @@ unlet plug_install
 " Plugin Configuration
 " ========================
 
-let g:fzf_action = {
-      \ 'ctrl-x': 'tab split' }
+let g:fzf_action = { 'enter': 'tab split' }
 let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
 
 let g:jsx_ext_required = 0
-
-let g:ale_open_list = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_linters = {'go': [], 'javascript': []}
 
 lua << END
 require'nvim-treesitter.configs'.setup {
@@ -135,7 +129,7 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = '',
     recommended = false,
-    manual_complete = 'ce',
+    manual_complete = 'ç',
   },
 
   clients = {
