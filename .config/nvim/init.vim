@@ -238,7 +238,7 @@ let g:go_fmt_autosave = 1
 
 " Github copilot
 
-let g:copilot_node_command = "/usr/local/Cellar/node@16/16.18.1/bin/node"
+let g:copilot_node_command = "/usr/local/Cellar/node@16/16.19.0_1/bin/node"
 
 nmap ll :Copilot panel<CR>
 
