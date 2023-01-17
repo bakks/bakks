@@ -23,3 +23,5 @@
   prp = !sh -c 'git pull --rebase && git push'
   gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
 
+[init]
+	defaultBranch = main
