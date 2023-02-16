@@ -262,6 +262,7 @@ set modelines=10
 set timeout timeoutlen=400 ttimeoutlen=400
 set autoread
 set backupcopy=yes      " gets around entr running twice
+set ignorecase          " ignore case when searching
 
 " insert new line at 80 characters with :Doc
 command -bar Doc set textwidth=80 | set fo+=to

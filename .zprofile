@@ -32,3 +32,9 @@ bindkey "^h" backward-char
 bindkey "^s" forward-char
 bindkey "»" forward-char
 
+# Color some common commands
+alias colorify="grc -es --colour=auto"
+alias configure='colorify ./configure'
+alias diff='colorify diff'
+alias make='colorify make'
+
