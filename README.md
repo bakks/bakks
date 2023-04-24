@@ -264,7 +264,7 @@ Allows you to manipulate the text of a tmux pane.
 : Go to definiton
 
 **cD**
-: Go to declaration
+: Go to type definition
 
 **ck**
 : Show definition in hover window
