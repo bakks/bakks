@@ -11,6 +11,7 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 
 alias ls='gls -hl --color=auto'
 alias vim="nvim"
+alias bf="butterfish"
 
 setopt share_history
 
