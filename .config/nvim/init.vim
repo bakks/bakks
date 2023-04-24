@@ -88,6 +88,7 @@ local getdef = function()
   vim.lsp.buf.definition({ reuse_win=true })
 end
 
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -97,9 +98,10 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'cD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'cd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'cD', vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set('n', 'ck', vim.lsp.buf.hover, bufopts)
+  --vim.keymap.set('n', 'cK', type_def_hover, bufopts) -- need to figure this out
   vim.keymap.set('n', 'ci', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', 'cs', vim.lsp.buf.signature_help, bufopts)
   -- vim.keymap.set('n', 'ctd', vim.lsp.buf.type_definition, bufopts)
@@ -174,7 +176,7 @@ end
 -- This is hacked scripting to get LSP go-to-definition
 -- to use tabs that are already open, and otherwise open a 
 -- new one. Can probably be simplified.
-vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
+local jumpfn = function(err, result, ctx, config)
   local client_encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
   if err then
     vim.notify(err.message)
@@ -204,6 +206,10 @@ vim.lsp.handlers["textDocument/definition"] = function(err, result, ctx, config)
     vim.lsp.util.jump_to_location(result, client_encoding, true)
   end
 end
+
+vim.lsp.handlers["textDocument/definition"] = jumpfn
+vim.lsp.handlers["textDocument/typeDefinition"] = jumpfn
+
 
 -- Configure diagnostics
 -- Turn off left bar signs
@@ -238,7 +244,7 @@ let g:go_fmt_autosave = 1
 
 " Github copilot
 
-let g:copilot_node_command = "/usr/local/Cellar/node@16/16.19.0_1/bin/node"
+let g:copilot_node_command = "/usr/local/Cellar/node@16/16.19.1/bin/node"
 
 nmap ll :Copilot panel<CR>
 
