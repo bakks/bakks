@@ -22,8 +22,7 @@ if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-s
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
 
-PS1="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
-export PROFILE="%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} "
+PROMPT=$'%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} '
 
 export FZF_CTRL_R_OPTS="--bind=ctrl-t:down,ctrl-n:up"
 
