@@ -6,6 +6,8 @@
 " PlugInstall
 " PlugUpdate
 " TSUpdate
+" COQdeps
+" Copilot status
 
 " auto install vim-plug and plugins
 let plug_install = 0
@@ -78,11 +80,40 @@ require'nvim-web-devicons'.setup {
  default = true,
 }
 
+local function nvim_tree_on_attach(bufnr)
+  local api = require('nvim-tree.api')
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+  api.config.mappings.default_on_attach(bufnr)
+
+  -- Mappings migrated from view.mappings.list
+  --
+  -- You will need to insert "your code goes here" for any mappings with a custom action_cb
+  vim.keymap.set('n', 'P', api.tree.close, opts('Close'))
+  vim.keymap.set('n', '<Esc>', api.tree.close, opts('Close'))
+  vim.keymap.set('n', 'O', api.node.open.no_window_picker, opts('Open: No Window Picker'))
+  vim.keymap.set('n', 'o', api.node.open.tab, opts('Open: New Tab'))
+  vim.keymap.set('n', '<CR>', api.node.open.tab, opts('Open: New Tab'))
+  vim.keymap.set('n', '<C-t>', api.node.navigate.sibling.next, opts('Next Sibling'))
+  vim.keymap.set('n', '<C-n>', api.node.navigate.parent, opts('Parent Directory'))
+
+end
+
+require("nvim-tree").setup({
+  on_attach = nvim_tree_on_attach,
+})
+
+
 -- nvim-lspconfig settings:
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap=true, silent=true }
 vim.keymap.set('n', 'ce', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', 'ct', vim.diagnostic.goto_next, bufopts)
+vim.keymap.set('n', 'cn', vim.diagnostic.goto_prev, bufopts)
 
 local getdef = function()
   vim.lsp.buf.definition({ reuse_win=true })
@@ -91,7 +122,7 @@ end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
+local lsp_on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -109,8 +140,6 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'cca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'cr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', 'cf', vim.lsp.buf.formatting, bufopts)
-  vim.keymap.set('n', 'ct', vim.diagnostic.goto_next, bufopts)
-  vim.keymap.set('n', 'cn', vim.diagnostic.goto_prev, bufopts)
 end
 
 local lsp_flags = {
@@ -160,7 +189,7 @@ vim.g.coq_settings = {
 local servers = { 'gopls', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(require('coq').lsp_ensure_capabilities({
-    on_attach = on_attach,
+    on_attach = lsp_on_attach,
     flags = lsp_flags,
   }))
 end
@@ -244,7 +273,7 @@ let g:go_fmt_autosave = 1
 
 " Github copilot
 
-let g:copilot_node_command = "/usr/local/Cellar/node@16/16.19.1/bin/node"
+let g:copilot_node_command = "/usr/local/Cellar/node@16/16.20.1_1/bin/node"
 
 nmap ll :Copilot panel<CR>
 
@@ -400,6 +429,8 @@ hi Pmenu ctermfg=231 ctermbg=17 cterm=NONE
 hi PmenuSel ctermfg=236 ctermbg=186 cterm=NONE
 hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
+
+hi Search ctermfg=DarkBlue ctermbg=LightMagenta
 
 " ========================
 " Re-Open files at old line
