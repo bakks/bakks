@@ -38,3 +38,4 @@ alias configure='colorify ./configure'
 alias diff='colorify diff'
 alias make='colorify make'
 
+eval $(/opt/homebrew/bin/brew shellenv)
