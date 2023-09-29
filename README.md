@@ -17,9 +17,9 @@ Current setup:
 
 # Brew packages
 # node@16 is necessary because Github Copilot vim plugin currently requires 12.x-17.x
-brew install node@16 tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils wget kitty grc
+brew install node@16 npm tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils wget kitty grc
 brew install homebrew/cask-fonts/font-hack-nerd-font
-brew install bakks/bakks/poptop
+brew install bakks/bakks/poptop bakks/bakks/butterfish
 
 # npm packages
 npm install -g typescript typescript-language-server pyright
