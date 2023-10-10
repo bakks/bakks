@@ -11,7 +11,7 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 
 alias ls='gls -hl --color=auto'
 alias vim="nvim"
-alias bf="butterfish"
+alias bf="~/butterfish/bin/butterfish"
 
 setopt share_history
 
@@ -39,3 +39,9 @@ alias diff='colorify diff'
 alias make='colorify make'
 
 eval $(/opt/homebrew/bin/brew shellenv)
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
