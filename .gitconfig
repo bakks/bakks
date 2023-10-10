@@ -12,6 +12,7 @@
 # http://stackoverflow.com/questions/18257622/why-is-git-core-preloadindex-default-value-false
 [core]
         preloadindex = true
+	editor = /opt/homebrew/bin/nvim
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
