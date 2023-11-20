@@ -36,6 +36,7 @@ Plug 'mhinz/vim-startify'
 Plug 'ms-jpq/coq_nvim',             { 'branch': 'coq' }
 Plug 'ms-jpq/coq.artifacts',        { 'branch': 'artifacts' }
 Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 call plug#helptags()
 
@@ -273,9 +274,19 @@ let g:go_fmt_autosave = 1
 
 " Github copilot
 
-let g:copilot_node_command = "/opt/homebrew/Cellar/node@16/16.20.2/bin/node"
+" let g:copilot_node_command = "/opt/homebrew/Cellar/node@16/16.20.2/bin/node"
 
 nmap ll :Copilot panel<CR>
+
+
+" git-gutter
+" This is highlighting for git changes in a file
+
+let g:gitgutter_enabled = 1
+set signcolumn=no
+autocmd VimEnter * GitGutterSignsDisable
+autocmd VimEnter * GitGutterLineHighlightsEnable
+
 
 " ==========================
 " Basic Neovim Configuration
@@ -431,6 +442,8 @@ hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
 
 hi Search ctermfg=DarkBlue ctermbg=LightMagenta
+
+hi GitGutterAddLine ctermbg=235
 
 " ========================
 " Re-Open files at old line
