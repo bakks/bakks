@@ -37,6 +37,7 @@ Plug 'ms-jpq/coq_nvim',             { 'branch': 'coq' }
 Plug 'ms-jpq/coq.artifacts',        { 'branch': 'artifacts' }
 Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-commentary'
 call plug#end()
 call plug#helptags()
 
@@ -56,6 +57,7 @@ let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
 let g:jsx_ext_required = 0
 
 lua << END
+
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python" },
@@ -434,16 +436,18 @@ set colorcolumn=80
 hi ColorColumn ctermbg=16
 
 "setup highlighting for status line
-hi User1 ctermfg=DarkBlue  ctermbg=LightMagenta
+hi User1 ctermfg=253 ctermbg=24
 
-hi Pmenu ctermfg=231 ctermbg=17 cterm=NONE
+hi Pmenu ctermfg=231 ctermbg=24 cterm=NONE
 hi PmenuSel ctermfg=236 ctermbg=186 cterm=NONE
 hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
 
 hi Search ctermfg=DarkBlue ctermbg=LightMagenta
 
-hi GitGutterAddLine ctermbg=235
+hi GitGutterAddLine ctermbg=236
+hi GitGutterChangeLine ctermbg=235
+hi GitGutterDeleteLine ctermfg=none
 
 " ========================
 " Re-Open files at old line
@@ -487,3 +491,12 @@ if has("autocmd")
     \ call SetProjectRoot()
 endif
 
+lua << ENDLUA
+package.loaded['gpt'] = nil
+local gpt = require('gpt')
+
+-- set ',' to run shell command
+--vim.api.nvim_set_keymap('n', ',', ':BFFilePrompt ', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', ',', ':BFRewrite ', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', ',', ':BFRewrite ', {noremap = true, silent = true})
+ENDLUA
