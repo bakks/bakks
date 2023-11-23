@@ -12,6 +12,7 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 alias ls='gls -hl --color=auto'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
+alias bfsh="~/butterfish/bin/butterfish shell -m gpt-3.5-turbo-1106 -v"
 
 setopt share_history
 
@@ -45,3 +46,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
+#source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
