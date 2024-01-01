@@ -14,53 +14,52 @@ let g:python3_host_prog = $HOME . '/.local/venv/nvim/bin/python'
 " ========================
 
 " Debugging plugins: run the following commands
-" PlugInstall
-" PlugUpdate
+" Lazy install
+" Lazy update
 " TSUpdate
 " COQdeps
 " UpdateRemotePlugins
 " Copilot status
 
-" auto install vim-plug and plugins
-let plug_install = 0
-let autoload_plug_path = stdpath('config') . '/autoload/plug.vim'
-if !filereadable(autoload_plug_path)
-    execute '!curl -fL --create-dirs -o ' . autoload_plug_path .
-        \ ' https://raw.github.com/junegunn/vim-plug/master/plug.vim'
-    execute 'source ' . fnameescape(autoload_plug_path)
-    let plug_install = 1
-endif
-unlet autoload_plug_path
-call plug#begin(stdpath('config') . '/plugged')
+lua << EOF
+plugins = {
+    {'junegunn/fzf', build = './install --all'},
+    'junegunn/fzf.vim',
+    'kyazdani42/nvim-web-devicons',
+    'kyazdani42/nvim-tree.lua',
+    {'fatih/vim-go', ft = 'go', build = ':GoInstallBinaries'},
+    {'pangloss/vim-javascript', ft = 'javascript'},
+    {'mxw/vim-jsx', ft = {'javascript', 'javascript.jsx'}},
+    {'prettier/vim-prettier', build = 'yarn install'},
+    'neovim/nvim-lspconfig',
+    {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate'},
+    'mhinz/vim-startify',
+    {'ms-jpq/coq_nvim', branch = 'coq'},
+    {'ms-jpq/coq.artifacts', branch = 'artifacts'},
+    {'github/copilot.vim', build = ':Copilot setup'},
+    'airblade/vim-gitgutter',
+    {'averms/black-nvim', build = ':UpdateRemotePlugins'},
+    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
+    'scottmckendry/cyberdream.nvim'
+}
 
-" plugins here ...
-Plug 'junegunn/fzf',                { 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'fatih/vim-go',                { 'for': 'go', 'do': ':GoInstallBinaries' }
-Plug 'pangloss/vim-javascript',     { 'for': 'javascript' }
-Plug 'mxw/vim-jsx',                 { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'prettier/vim-prettier',       { 'do': 'yarn install' }
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'mhinz/vim-startify'
-Plug 'ms-jpq/coq_nvim',             { 'branch': 'coq' }
-Plug 'ms-jpq/coq.artifacts',        { 'branch': 'artifacts' }
-Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-commentary'
-Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'bakks/butterfish.nvim'
-Plug 'scottmckendry/cyberdream.nvim'
-call plug#end()
-call plug#helptags()
+-- Bootstrap lazy plugin manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-" auto install vim-plug and plugins:
-if plug_install
-    PlugInstall --sync
-endif
-unlet plug_install
+-- load lazy plugin manager
+require('lazy').setup(plugins)
+EOF
 
 " ========================
 " Plugin Configuration
@@ -493,7 +492,6 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 end
 
 vim.cmd [[syntax on]]
-vim.cmd [[set t_Co=256]]
 vim.cmd [[colorscheme cyberdream]]
 vim.cmd [[set colorcolumn=80]]
 ENDLUA
