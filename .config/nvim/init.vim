@@ -51,6 +51,7 @@ Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'bakks/butterfish.nvim'
 Plug 'scottmckendry/cyberdream.nvim'
 call plug#end()
 call plug#helptags()
@@ -524,11 +525,24 @@ if has("autocmd")
 endif
 
 lua << ENDLUA
-package.loaded['gpt'] = nil
-local gpt = require('gpt')
 
--- set ',' to run shell command
---vim.api.nvim_set_keymap('n', ',', ':BFFilePrompt ', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', ',', ':BFRewrite ', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('v', ',', ':BFRewrite ', {noremap = true, silent = true})
+package.loaded['butterfish'] = nil
+
+-- butterfish.nvim config
+-- https://github.com/bakks/butterfish.nvim
+local butterfish = require('butterfish')
+local opts = {noremap = true, silent = true}
+vim.api.nvim_set_keymap('n', ',p', ':BFFilePrompt ',   opts)
+vim.api.nvim_set_keymap('n', ',r', ':BFRewrite ',      opts)
+vim.api.nvim_set_keymap('v', ',r', ':BFRewrite ',      opts)
+vim.api.nvim_set_keymap('n', ',c', ':BFComment<CR>',   opts)
+vim.api.nvim_set_keymap('v', ',c', ':BFComment<CR>',   opts)
+vim.api.nvim_set_keymap('n', ',e', ':BFExplain<CR>',   opts)
+vim.api.nvim_set_keymap('v', ',e', ':BFExplain<CR>',   opts)
+vim.api.nvim_set_keymap('n', ',f', ':BFFix<CR>',       opts)
+vim.api.nvim_set_keymap('n', ',i', ':BFImplement<CR>', opts)
+vim.api.nvim_set_keymap('n', ',d', ':BFEdit ',         opts)
+vim.api.nvim_set_keymap('n', ',h', ':BFHammer<CR>',    opts)
+vim.api.nvim_set_keymap('n', ',q', ':BFQuestion ',     opts)
+vim.api.nvim_set_keymap('v', ',q', ':BFQuestion ',     opts)
 ENDLUA
