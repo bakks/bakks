@@ -354,8 +354,8 @@ let g:mapleader="c"
 nmap U :redo<CR>
 
 " Pane navigation
-nnoremap <C-m> <C-W><C-J>
-nnoremap <C-w> <C-W><C-K>
+"nnoremap <C-m> <C-W><C-J>
+"nnoremap <C-w> <C-W><C-K>
 
 " Capital T/N to iterate through search results
 nmap T /<CR>
@@ -393,9 +393,26 @@ vmap <C-t> tttttttt
 vmap <C-n> nnnnnnnn
 vmap » ssssssssssss
 
+" window controls
+" option-b goes to next window
+nnoremap ∫ <C-w>w
+" option-m goes to previous window
+nnoremap µ <C-w>p
+
 " tab controls
+" B goes to next tab
 nmap B gt
+" M goes to previous tab
 nmap M gT
+
+" quickfix controls
+" ctrl-b switches back to previous buffer
+cnoremap <D-b> :q<CR>
+" ctrl-t goes to next item
+cnoremap <C-t> :cnext<CR>
+" ctrl-n goes to previous item
+cnoremap <C-n> :cprev<CR>
+
 
 " jump to top
 no j :0<CR>
