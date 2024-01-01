@@ -1,3 +1,14 @@
+let g:python3_host_prog = $HOME . '/.local/venv/nvim/bin/python'
+""""""
+" Python setup
+" mkdir -p ~/.local/venv && cd ~/.local/venv
+" python3 -m venv nvim
+" cd nvim
+" . ./bin/activate
+" pip install pynvim black
+
+
+
 " ========================
 " Import Plugins
 " ========================
@@ -7,6 +18,7 @@
 " PlugUpdate
 " TSUpdate
 " COQdeps
+" UpdateRemotePlugins
 " Copilot status
 
 " auto install vim-plug and plugins
@@ -38,6 +50,7 @@ Plug 'ms-jpq/coq.artifacts',        { 'branch': 'artifacts' }
 Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
+Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
 call plug#end()
 call plug#helptags()
 
@@ -118,10 +131,6 @@ vim.keymap.set('n', 'ce', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', 'ct', vim.diagnostic.goto_next, bufopts)
 vim.keymap.set('n', 'cn', vim.diagnostic.goto_prev, bufopts)
 
-local getdef = function()
-  vim.lsp.buf.definition({ reuse_win=true })
-end
-
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -149,8 +158,6 @@ local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
 }
-
-local lspconfig = require('lspconfig')
 
 -- COQ (autocompletion) settings
 vim.g.coq_settings = {
@@ -188,6 +195,8 @@ vim.g.coq_settings = {
   }
 }
 
+local lspconfig = require('lspconfig')
+
 -- Enable some language servers with the additional completion capabilities offered by coq_nvim
 local servers = { 'gopls', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
@@ -206,7 +215,7 @@ local function bufwinid(bufnr)
 end
 
 -- This is hacked scripting to get LSP go-to-definition
--- to use tabs that are already open, and otherwise open a 
+-- to use tabs that are already open, and otherwise open a
 -- new one. Can probably be simplified.
 local jumpfn = function(err, result, ctx, config)
   local client_encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
@@ -255,7 +264,9 @@ END
 
 " run Prettier before saving for these file types
 let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad Prettier
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad,*.html Prettier
+
+autocmd BufWritePre *.py execute ':call Black()'
 
 " turn off some go-vim functionality
 let g:go_def_mapping_enabled = 0
@@ -370,6 +381,7 @@ imap » <Right>
 imap <C-e> <C-x><C-o>
 
 " map control-move chars to 5x
+" » is configured separately
 nmap <C-h> hhhhhhhhhhhh
 nmap <C-t> tttttttt
 nmap <C-n> nnnnnnnn
