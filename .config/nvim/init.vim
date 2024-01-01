@@ -51,6 +51,7 @@ Plug 'github/copilot.vim',          { 'do': ':Copilot setup' }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'scottmckendry/cyberdream.nvim'
 call plug#end()
 call plug#helptags()
 
@@ -439,27 +440,46 @@ nnoremap <C-p> :GitFiles<CR>
 " Color Scheme
 " ========================
 
-syntax on
-set t_Co=256
-colorscheme monokai
-hi Normal ctermbg=233  " darken background a bit
+lua << ENDLUA
 
-set colorcolumn=80
-hi ColorColumn ctermbg=16
+color_overrides = {
+  -- Highlight groups to override, adding new groups is also possible
+  -- See `:help highlight-groups` for a list of highlight groups
 
-"setup highlighting for status line
-hi User1 ctermfg=253 ctermbg=24
+  -- overall background
+  Normal = { bg = '#101010' },
+  -- vertical line on right side
+  ColorColumn = { bg = '#000000' },
+  -- status line
+  User1 = { fg = '#d0d0d0', bg = '#005f87' },
+  -- LSP floating box
+  NormalFloat = { bg = '#101010' },
+  FloatBorder = { fg = '#ff5ea0', bg = '#101010' },
+  GitGutterAddLine = { bg = '#1b1b1b' },
+  GitGutterChangeLine = { bg = '#202020' },
+  GitGutterDeleteLine = { bg = 'none' },
+  GitGutterChangeDeleteLine = { bg = 'none' },
+}
 
-hi Pmenu ctermfg=231 ctermbg=24 cterm=NONE
-hi PmenuSel ctermfg=236 ctermbg=186 cterm=NONE
-hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
-hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
+require("cyberdream").setup({
+  italic_comments = true,
+  theme = { highlights = color_overrides, },
+})
 
-hi Search ctermfg=DarkBlue ctermbg=LightMagenta
+-- Override LSP floating window config to add rounded border
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or 'rounded'
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
 
-hi GitGutterAddLine ctermbg=236
-hi GitGutterChangeLine ctermbg=235
-hi GitGutterDeleteLine ctermfg=none
+vim.cmd [[syntax on]]
+vim.cmd [[set t_Co=256]]
+vim.cmd [[colorscheme cyberdream]]
+vim.cmd [[set colorcolumn=80]]
+ENDLUA
+
 
 " ========================
 " Re-Open files at old line
