@@ -21,7 +21,7 @@ let g:python3_host_prog = $HOME . '/.local/venv/nvim/bin/python'
 " UpdateRemotePlugins
 " Copilot status
 
-lua << EOF
+lua << ENDLUA
 plugins = {
     {'junegunn/fzf', build = './install --all'},
     'junegunn/fzf.vim',
@@ -59,7 +59,54 @@ vim.opt.rtp:prepend(lazypath)
 
 -- load lazy plugin manager
 require('lazy').setup(plugins)
-EOF
+ENDLUA
+
+" ==========================
+" Basic Neovim Configuration
+" ==========================
+
+lua << ENDLUA
+-- Set options
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.incsearch = true
+vim.opt.hlsearch = true
+vim.opt.laststatus = 2
+vim.opt.backspace:append("indent")
+vim.opt.backspace:append("eol")
+vim.opt.backspace:append("start")
+vim.opt.filetype.plugin = true
+vim.opt.modeline = true
+vim.opt.modelines = 10
+vim.opt.timeout = true
+vim.opt.timeoutlen = 400
+vim.opt.ttimeoutlen = 400
+vim.opt.autoread = true
+vim.opt.backupcopy = "yes"
+vim.opt.ignorecase = true
+
+-- Define command for inserting new line at 80 characters
+vim.cmd("command! -bar Doc set textwidth=80 | set fo+=to")
+
+-- Set specific options for file types
+vim.cmd("autocmd FileType make setlocal noexpandtab")
+vim.cmd("autocmd FileType python setlocal expandtab")
+vim.cmd("autocmd FileType coffee setlocal noexpandtab")
+vim.cmd("autocmd FileType php setlocal noexpandtab")
+
+-- Set file type for specific file extension
+vim.cmd("au BufRead,BufNewFile *.g4 set filetype=antlr4")
+
+-- Set statusline
+vim.opt.statusline = "%1*\\%<%F\\" .. -- File+path
+                     " %=" ..         -- Filler
+                     "%1*\\%m%r%w" .. -- Modified? Readonly?
+                     " %l/%L:%02c"    -- Row/total:column
+                     
+ENDLUA
 
 " ========================
 " Plugin Configuration
@@ -97,7 +144,7 @@ require'nvim-web-devicons'.setup {
  default = true,
 }
 
-local function nvim_tree_on_attach(bufnr)
+local function nvim_tree_keybinds(bufnr)
   local api = require('nvim-tree.api')
 
   local function opts(desc)
@@ -106,21 +153,17 @@ local function nvim_tree_on_attach(bufnr)
 
   api.config.mappings.default_on_attach(bufnr)
 
-  -- Mappings migrated from view.mappings.list
-  --
-  -- You will need to insert "your code goes here" for any mappings with a custom action_cb
-  vim.keymap.set('n', 'P', api.tree.close, opts('Close'))
-  vim.keymap.set('n', '<Esc>', api.tree.close, opts('Close'))
-  vim.keymap.set('n', 'O', api.node.open.no_window_picker, opts('Open: No Window Picker'))
-  vim.keymap.set('n', 'o', api.node.open.tab, opts('Open: New Tab'))
-  vim.keymap.set('n', '<CR>', api.node.open.tab, opts('Open: New Tab'))
+  vim.keymap.set('n', 'P',     api.tree.close,                 opts('Close'))
+  vim.keymap.set('n', '<Esc>', api.tree.close,                 opts('Close'))
+  vim.keymap.set('n', 'O',     api.node.open.no_window_picker, opts('Open: No Window Picker'))
+  vim.keymap.set('n', 'o',     api.node.open.tab,              opts('Open: New Tab'))
+  vim.keymap.set('n', '<CR>',  api.node.open.tab,              opts('Open: New Tab'))
   vim.keymap.set('n', '<C-t>', api.node.navigate.sibling.next, opts('Next Sibling'))
-  vim.keymap.set('n', '<C-n>', api.node.navigate.parent, opts('Parent Directory'))
-
+  vim.keymap.set('n', '<C-n>', api.node.navigate.parent,       opts('Parent Directory'))
 end
 
 require("nvim-tree").setup({
-  on_attach = nvim_tree_on_attach,
+  on_attach = nvim_tree_keybinds,
 })
 
 
@@ -301,46 +344,6 @@ set signcolumn=no
 autocmd VimEnter * GitGutterSignsDisable
 autocmd VimEnter * GitGutterLineHighlightsEnable
 
-
-" ==========================
-" Basic Neovim Configuration
-" ==========================
-
-set nocompatible        " no vi shit
-set autoindent          " auto indent next line
-set smartindent         " do this intelligently for code
-set tabstop=2           " 2 char tabs
-set shiftwidth=2        " 2 char >> shifts
-set expandtab           " turn tabs into spaces
-set incsearch           " search as we type
-set hlsearch            " highlight search results
-set laststatus=2        " always show status line
-set backspace=indent,eol,start
-filetype plugin on
-set modeline
-set modelines=10
-set timeout timeoutlen=400 ttimeoutlen=400
-set autoread
-set backupcopy=yes      " gets around entr running twice
-set ignorecase          " ignore case when searching
-
-" insert new line at 80 characters with :Doc
-command -bar Doc set textwidth=80 | set fo+=to
-
-" allow tabs in makefiles and python
-autocmd FileType make setlocal noexpandtab
-autocmd FileType python setlocal expandtab
-autocmd FileType coffee setlocal noexpandtab
-autocmd FileType php setlocal noexpandtab
-
-au BufRead,BufNewFile *.g4 set filetype=antlr4
-
-" set statusline
-set statusline=
-set statusline+=%1*\%<%F\              " File+path
-set statusline+=\ %=\                  " filler
-set statusline+=%1*\%m%r%w             " Modified? Readonly?
-set statusline+=\ %l/%L:%02c           " row/total:column
 
 
 " ========================
