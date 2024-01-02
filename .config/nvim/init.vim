@@ -101,12 +101,105 @@ vim.cmd("autocmd FileType php setlocal noexpandtab")
 vim.cmd("au BufRead,BufNewFile *.g4 set filetype=antlr4")
 
 -- Set statusline
-vim.opt.statusline = "%1*\\%<%F\\" .. -- File+path
-                     " %=" ..         -- Filler
-                     "%1*\\%m%r%w" .. -- Modified? Readonly?
-                     " %l/%L:%02c"    -- Row/total:column
+vim.opt.statusline = "%1*%<%F" ..   -- File+path
+                     " %=" ..       -- Filler
+                     "%1*%m%r%w" .. -- Modified? Readonly?
+                     " %l/%L:%02c"  -- Row/total:column
                      
 ENDLUA
+
+" ========================
+" Basic Key Bindings
+" ========================
+
+lua << ENDLUA
+
+-- Assumptions:
+--   » is ctrl-s, mapped in terminal
+--   ∫ is opt-b
+--   µ is opt-m
+
+local function keybind(mode, lhs, rhs, desc, opts)
+  default_opts = { noremap = true, silent = true, desc = desc }
+  opts = opts or {}
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+local function rpt(str, n)
+  return string.rep(str, n)
+end
+
+vim.g.mapleader = "c"
+
+-- dvorak movement mappings
+keybind('n', 'h', '<Left>',            'h to left')
+keybind('n', 't', '<Down>',            't to down')
+keybind('n', 'n', '<Up>',              'n to up')
+keybind('n', 's', '<Right>',           's to right')
+keybind('v', 'h', '<Left>',            'h to left')
+keybind('v', 't', '<Down>',            't to down')
+keybind('v', 'n', '<Up>',              'n to up')
+keybind('v', 's', '<Right>',           's to right')
+
+-- control-letter during insert mode moves
+keybind('i', '<C-h>', '<Left>',        'ctrl-h to left')
+keybind('i', '<C-t>', '<Down>',        'ctrl-t to down')
+keybind('i', '<C-n>', '<Up>',          'ctrl-n to up')
+keybind('i', '»', '<Right>',           'ctrl-s to right')
+keybind('i', '<C-e>', '<C-x><C-o>',    'ctrl-e to end of line')
+
+keybind('n', 'U', ':redo<CR>',         'U to redo')
+keybind('n', 'T', '/<CR>',             'T to search forward')
+keybind('n', 'N', '?<CR>',             'N to search backward')
+
+-- rapid movement
+keybind('n', '<C-h>', rpt('<Left>', 14),  'ctrl-h to move left 14x')
+keybind('n', '»',     rpt('<Right>', 14), 'ctrl-s to move right 14x')
+keybind('n', '<C-t>', rpt('<Down>', 8),   'ctrl-t to move down 8x')
+keybind('n', '<C-n>', rpt('<Up>', 8),     'ctrl-n to move up 8x')
+keybind('v', '<C-h>', rpt('<Left>', 14),  'ctrl-h to move left 14x')
+keybind('v', '»',     rpt('<Right>', 14), 'ctrl-s to move right 14x')
+keybind('v', '<C-t>', rpt('<Down>', 8),   'ctrl-t to move down 8x')
+keybind('v', '<C-n>', rpt('<Up>', 8),     'ctrl-n to move up 8x')
+
+-- window movement
+keybind('n', '∫', '<C-w>w',        'opt-b to next window')
+keybind('n', 'µ', '<C-w>p',        'opt-m to previous window')
+
+-- tab movement
+keybind('n', 'B', 'gt',            'B to next tab')
+keybind('n', 'M', 'gT',            'M to previous tab')
+
+-- quickfix movement
+keybind('n', '<M-t>', ':cn<CR>',   'M-t to next item')
+keybind('n', '<M-n>', ':cp<CR>',   'M-n to previous item')
+keybind('c', '<C-t>', ':cn<CR>',   'ctrl-t to next item')
+keybind('c', '<C-n>', ':cp<CR>',   'ctrl-n to previous item')
+
+-- other
+keybind('n', 'j', ':0<CR>',       'j to top')
+keybind('n', 'q', ':$<CR>',       'q to bottom')
+keybind('n', 'm', 's',            'm to replace text')
+keybind('v', 'm', 's',            'm to replace text')
+keybind('n', 'k', ':w<CR>',       'k to write file')
+keybind('v', 'k', '<C-O>:w<CR>',  'k to write file')
+keybind('n', '<C-r>', ':e!<CR>',  'ctrl-r to reload file')
+keybind('n', '<C-e>', '$',        'ctrl-e to jump to end of line')
+keybind('n', '<C-a>', '0',        'ctrl-a to jump to beginning of line')
+keybind('n', 'Q', ':q<CR>',       'Q to quit')
+keybind('n', 'e', ':s/\n//<CR>:noh<CR>',
+  'e to delete trailing newline')
+keybind('n', '-', ':%s/\\s\\+$//<CR>',
+  '- to kill trailing whitespace')
+keybind('n', ';', ':source ~/.config/nvim/init.vim<CR>',
+  '; to reload vim config')
+
+
+ENDLUA
+
+nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" --exclude-dir="./webclient/static" -siIR "" .<Left><Left><Left>
+
+
 
 " ========================
 " Plugin Configuration
@@ -346,101 +439,6 @@ autocmd VimEnter * GitGutterLineHighlightsEnable
 
 
 
-" ========================
-" Basic Key Bindings
-" ========================
-"
-let g:mapleader="c"
-
-" U to redo
-nmap U :redo<CR>
-
-" Pane navigation
-"nnoremap <C-m> <C-W><C-J>
-"nnoremap <C-w> <C-W><C-K>
-
-" Capital T/N to iterate through search results
-nmap T /<CR>
-nmap N ?<CR>
-
-nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" --exclude-dir="./webclient/static" -siIR "" .<Left><Left><Left>
-nmap <M-t> :cn<CR>
-nmap <M-n> :cp<CR>
-
-" dvorak movement mappings
-nmap h <Left>
-nmap t <Down>
-nmap n <Up>
-nmap s <Right>
-vmap h <Left>
-vmap t <Down>
-vmap n <Up>
-vmap s <Right>
-
-" control-letter during insert mode moves
-imap <C-h> <Left>
-imap <C-t> <Down>
-imap <C-n> <Up>
-imap » <Right>
-imap <C-e> <C-x><C-o>
-
-" map control-move chars to 5x
-" » is configured separately
-nmap <C-h> hhhhhhhhhhhh
-nmap <C-t> tttttttt
-nmap <C-n> nnnnnnnn
-nmap » ssssssssssss
-vmap <C-h> hhhhhhhhhhhh
-vmap <C-t> tttttttt
-vmap <C-n> nnnnnnnn
-vmap » ssssssssssss
-
-" window controls
-" option-b goes to next window
-nnoremap ∫ <C-w>w
-" option-m goes to previous window
-nnoremap µ <C-w>p
-
-" tab controls
-" B goes to next tab
-nmap B gt
-" M goes to previous tab
-nmap M gT
-
-" quickfix controls
-" ctrl-b switches back to previous buffer
-cnoremap <D-b> :q<CR>
-" ctrl-t goes to next item
-cnoremap <C-t> :cnext<CR>
-" ctrl-n goes to previous item
-cnoremap <C-n> :cprev<CR>
-
-
-" jump to top
-no j :0<CR>
-" jump to bottom
-no q :$<CR>
-" replace text
-no m s
-" write file
-nmap k :w<CR>
-" reload file
-nmap <C-r> :edit!<CR>
-" delete newline
-no e :s/\n//<CR>:noh<CR>
-" jump to end of line
-nmap <C-e> $
-" jump to beginning of line
-nmap <C-a> 0
-" reload vim config
-nmap ; :source ~/.config/nvim/init.vim<CR>
-
-" save and run make in current dir
-nmap <F5> :w<CR> :! make<CR>
-" kill trailing whitespace
-nmap - :%s/\s\+$//<CR>
-
-nmap Q :q<CR>
 
 " ========================
 " Plugin Key Bindings
