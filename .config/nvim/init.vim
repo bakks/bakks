@@ -119,13 +119,14 @@ lua << ENDLUA
 --   ∫ is opt-b
 --   µ is opt-m
 
-local function keybind(mode, lhs, rhs, desc, opts)
-  default_opts = { noremap = true, silent = true, desc = desc }
+function keybind(mode, lhs, rhs, desc, opts)
+  default_opts = { noremap = true, silent = true }
   opts = opts or {}
+  opts.desc = desc
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-local function rpt(str, n)
+function rpt(str, n)
   return string.rep(str, n)
 end
 
@@ -200,6 +201,79 @@ ENDLUA
 nmap = :grep --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=".next" --exclude-dir="./webclient/static" -siIR "" .<Left><Left><Left>
 
 
+" ========================
+" Plugin Key Bindings
+" ========================
+
+lua << ENDLUA
+
+-- butterfish.nvim
+keybind('n', ',p', ':BFFilePrompt ',   ',p to prompt in a file')
+keybind('n', ',r', ':BFRewrite ',      ',r to rewrite a line')
+keybind('v', ',r', ':BFRewrite ',      ',r to rewrite a block')
+keybind('n', ',c', ':BFComment<CR>',   ',c to comment above a line')
+keybind('v', ',c', ':BFComment<CR>',   ',c to comment above a block')
+keybind('n', ',e', ':BFExplain<CR>',   ',e to explain a line')
+keybind('v', ',e', ':BFExplain<CR>',   ',e to explain a block')
+keybind('n', ',f', ':BFFix<CR>',       ',f to fix an LSP error')
+keybind('n', ',i', ':BFImplement<CR>', ',i to implement based on preceding code')
+keybind('n', ',d', ':BFEdit ',         ',d to edit a file at arbitrary locations')
+keybind('n', ',h', ':BFHammer<CR>',    ',h to edit based on hammer.sh output')
+keybind('n', ',q', ':BFQuestion ',     ',q to ask a question')
+keybind('v', ',q', ':BFQuestion ',     ',q to ask a question about a block')
+
+-- nvim-tree
+keybind('n', 'P', ':NvimTreeToggle<CR>', 'P to toggle file tree')
+keybind('v', 'P', ':NvimTreeToggle<CR>', 'P to toggle file tree')
+
+function nvim_tree_keybinds(bufnr)
+  local api = require('nvim-tree.api')
+
+  api.config.mappings.default_on_attach(bufnr)
+
+  -- these keybinds apply only within the nvim-tree window
+  opt = { noremap = true, silent = true, buffer = bufnr }
+
+  keybind('n', 'P', api.tree.close, 'Close', opt)
+  keybind('n', '<Esc>', api.tree.close, 'Close', opt)
+  keybind('n', 'O', api.node.open.no_window_picker, 'Open: No Window Picker', opt)
+  keybind('n', 'o', api.node.open.tab, 'Open: New Tab', opt)
+  keybind('n', '<CR>', api.node.open.tab, 'Open: New Tab', opt)
+  keybind('n', '<C-t>', api.node.navigate.sibling.next, 'Next Sibling', opt)
+  keybind('n', '<C-n>', api.node.navigate.parent, 'Parent Directory', opt)
+end
+
+-- LSP
+keybind('n', 'ce', vim.diagnostic.open_float, 'ce to open floating error desc')
+keybind('n', 'ct', vim.diagnostic.goto_next,  'ct to go to next error')
+keybind('n', 'cn', vim.diagnostic.goto_prev,  'cn to go to previous error')
+
+-- nvim-lspconfig
+
+function lsp_keybinds(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  opt = { noremap = true, silent = true, buffer = bufnr }
+
+  keybind('n', 'cd', vim.lsp.buf.definition, 'Go to definition')
+  keybind('n', 'cD', vim.lsp.buf.type_definition, 'Go to type definition')
+  keybind('n', 'ck', vim.lsp.buf.hover, 'Show hover information')
+  keybind('n', 'ci', vim.lsp.buf.implementation, 'Go to implementation')
+  keybind('n', 'cs', vim.lsp.buf.signature_help, 'Show signature help')
+  keybind('n', 'cR', vim.lsp.buf.rename, 'Rename symbol')
+  keybind('n', 'cca', vim.lsp.buf.code_action, 'Code action')
+  keybind('n', 'cr', vim.lsp.buf.references, 'Find references')
+  keybind('n', 'cf', vim.lsp.buf.formatting, 'Format code')
+end
+
+-- fzf
+keybind('n', '<C-p>', ':GitFiles<CR>', 'ctrl-p to open FZF finder')
+
+
+
+ENDLUA
 
 " ========================
 " Plugin Configuration
@@ -237,59 +311,11 @@ require'nvim-web-devicons'.setup {
  default = true,
 }
 
-local function nvim_tree_keybinds(bufnr)
-  local api = require('nvim-tree.api')
-
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-  api.config.mappings.default_on_attach(bufnr)
-
-  vim.keymap.set('n', 'P',     api.tree.close,                 opts('Close'))
-  vim.keymap.set('n', '<Esc>', api.tree.close,                 opts('Close'))
-  vim.keymap.set('n', 'O',     api.node.open.no_window_picker, opts('Open: No Window Picker'))
-  vim.keymap.set('n', 'o',     api.node.open.tab,              opts('Open: New Tab'))
-  vim.keymap.set('n', '<CR>',  api.node.open.tab,              opts('Open: New Tab'))
-  vim.keymap.set('n', '<C-t>', api.node.navigate.sibling.next, opts('Next Sibling'))
-  vim.keymap.set('n', '<C-n>', api.node.navigate.parent,       opts('Parent Directory'))
-end
-
 require("nvim-tree").setup({
   on_attach = nvim_tree_keybinds,
 })
 
 
--- nvim-lspconfig settings:
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', 'ce', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', 'ct', vim.diagnostic.goto_next, bufopts)
-vim.keymap.set('n', 'cn', vim.diagnostic.goto_prev, bufopts)
-
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local lsp_on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'cd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'cD', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', 'ck', vim.lsp.buf.hover, bufopts)
-  --vim.keymap.set('n', 'cK', type_def_hover, bufopts) -- need to figure this out
-  vim.keymap.set('n', 'ci', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', 'cs', vim.lsp.buf.signature_help, bufopts)
-  -- vim.keymap.set('n', 'ctd', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', 'cR', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', 'cca', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'cr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', 'cf', vim.lsp.buf.formatting, bufopts)
-end
 
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
@@ -338,7 +364,7 @@ local lspconfig = require('lspconfig')
 local servers = { 'gopls', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(require('coq').lsp_ensure_capabilities({
-    on_attach = lsp_on_attach,
+    on_attach = lsp_keybinds,
     flags = lsp_flags,
   }))
 end
@@ -438,22 +464,6 @@ autocmd VimEnter * GitGutterSignsDisable
 autocmd VimEnter * GitGutterLineHighlightsEnable
 
 
-
-
-" ========================
-" Plugin Key Bindings
-" ========================
-
-nmap <silent> P :NvimTreeToggle<CR>
-vmap <silent> P :NvimTreeToggle<CR>
-" Turning these off in favor of LSP
-"au filetype go nmap <silent> <leader>d <Plug>(go-def-tab)
-nmap cu :GoInfo<CR>
-"au filetype go nmap <leader>r :GoReferrers<CR>
-
-" Control-P opens FZF finder that ignores .gitignore files
-nnoremap <C-p> :GitFiles<CR>
-
 " ========================
 " Color Scheme
 " ========================
@@ -547,18 +557,4 @@ package.loaded['butterfish'] = nil
 -- butterfish.nvim config
 -- https://github.com/bakks/butterfish.nvim
 local butterfish = require('butterfish')
-local opts = {noremap = true, silent = true}
-vim.api.nvim_set_keymap('n', ',p', ':BFFilePrompt ',   opts)
-vim.api.nvim_set_keymap('n', ',r', ':BFRewrite ',      opts)
-vim.api.nvim_set_keymap('v', ',r', ':BFRewrite ',      opts)
-vim.api.nvim_set_keymap('n', ',c', ':BFComment<CR>',   opts)
-vim.api.nvim_set_keymap('v', ',c', ':BFComment<CR>',   opts)
-vim.api.nvim_set_keymap('n', ',e', ':BFExplain<CR>',   opts)
-vim.api.nvim_set_keymap('v', ',e', ':BFExplain<CR>',   opts)
-vim.api.nvim_set_keymap('n', ',f', ':BFFix<CR>',       opts)
-vim.api.nvim_set_keymap('n', ',i', ':BFImplement<CR>', opts)
-vim.api.nvim_set_keymap('n', ',d', ':BFEdit ',         opts)
-vim.api.nvim_set_keymap('n', ',h', ':BFHammer<CR>',    opts)
-vim.api.nvim_set_keymap('n', ',q', ':BFQuestion ',     opts)
-vim.api.nvim_set_keymap('v', ',q', ':BFQuestion ',     opts)
 ENDLUA
