@@ -39,7 +39,7 @@ plugins = {
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
     {'averms/black-nvim', build = ':UpdateRemotePlugins'},
-    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
+    {'bakks/butterfish.nvim', dir = '~/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
     'scottmckendry/cyberdream.nvim'
 }
 
@@ -188,8 +188,7 @@ keybind('n', '<C-r>', ':e!<CR>',  'ctrl-r to reload file')
 keybind('n', '<C-e>', '$',        'ctrl-e to jump to end of line')
 keybind('n', '<C-a>', '0',        'ctrl-a to jump to beginning of line')
 keybind('n', 'Q', ':q<CR>',       'Q to quit')
-keybind('n', 'e', ':s/\n//<CR>:noh<CR>',
-  'e to delete trailing newline')
+keybind('n', 'e', '$J<Right>',    'e to delete trailing newline')
 keybind('n', '-', ':%s/\\s\\+$//<CR>',
   '- to kill trailing whitespace')
 keybind('n', ';', ':source ~/.config/nvim/init.vim<CR>',
@@ -209,6 +208,7 @@ lua << ENDLUA
 
 -- butterfish.nvim
 keybind('n', ',p', ':BFFilePrompt ',   ',p to prompt in a file')
+keybind('v', ',p', ':BFFilePrompt ',   ',p to prompt in a file')
 keybind('n', ',r', ':BFRewrite ',      ',r to rewrite a line')
 keybind('v', ',r', ':BFRewrite ',      ',r to rewrite a block')
 keybind('n', ',c', ':BFComment<CR>',   ',c to comment above a line')
