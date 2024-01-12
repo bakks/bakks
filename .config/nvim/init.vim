@@ -40,7 +40,8 @@ plugins = {
     'airblade/vim-gitgutter',
     {'averms/black-nvim', build = ':UpdateRemotePlugins'},
     {'bakks/butterfish.nvim', dir = '~/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
-    'scottmckendry/cyberdream.nvim'
+    'scottmckendry/cyberdream.nvim',
+    'sbdchd/neoformat',
 }
 
 -- Bootstrap lazy plugin manager
@@ -90,15 +91,6 @@ vim.opt.ignorecase = true
 
 -- Define command for inserting new line at 80 characters
 vim.cmd("command! -bar Doc set textwidth=80 | set fo+=to")
-
--- Set specific options for file types
-vim.cmd("autocmd FileType make setlocal noexpandtab")
-vim.cmd("autocmd FileType python setlocal expandtab")
-vim.cmd("autocmd FileType coffee setlocal noexpandtab")
-vim.cmd("autocmd FileType php setlocal noexpandtab")
-
--- Set file type for specific file extension
-vim.cmd("au BufRead,BufNewFile *.g4 set filetype=antlr4")
 
 -- Set statusline
 vim.opt.statusline = "%1*%<%F" ..   -- File+path
@@ -359,15 +351,18 @@ vim.g.coq_settings = {
 }
 
 local lspconfig = require('lspconfig')
+lspconfig.rust_analyzer.setup({})
 
 -- Enable some language servers with the additional completion capabilities offered by coq_nvim
-local servers = { 'gopls', 'pyright', 'tsserver' }
+local servers = { 'gopls', 'pyright', 'tsserver', 'rust_analyzer' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(require('coq').lsp_ensure_capabilities({
     on_attach = lsp_keybinds,
     flags = lsp_flags,
   }))
 end
+
+
 
 local function bufwinid(bufnr)
   for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -418,18 +413,9 @@ vim.lsp.handlers["textDocument/typeDefinition"] = jumpfn
 -- Configure diagnostics
 -- Turn off left bar signs
 vim.diagnostic.config({ signs = false })
--- Show full description in window on hover
---vim.o.updatetime = 250
---vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
 END
 
-
-" run Prettier before saving for these file types
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad,*.html Prettier
-
-autocmd BufWritePre *.py execute ':call Black()'
 
 " turn off some go-vim functionality
 let g:go_def_mapping_enabled = 0
@@ -460,8 +446,6 @@ nmap ll :Copilot panel<CR>
 
 let g:gitgutter_enabled = 1
 set signcolumn=no
-autocmd VimEnter * GitGutterSignsDisable
-autocmd VimEnter * GitGutterLineHighlightsEnable
 
 
 " ========================
@@ -540,15 +524,6 @@ function! FollowSymlink()
 endfunction
 
 
-" re-open files at old line
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-
-  autocmd BufRead *
-    \ call FollowSymlink() |
-    \ call SetProjectRoot()
-endif
 
 lua << ENDLUA
 
@@ -557,4 +532,48 @@ package.loaded['butterfish'] = nil
 -- butterfish.nvim config
 -- https://github.com/bakks/butterfish.nvim
 local butterfish = require('butterfish')
+butterfish.active_color_group = "User1"
 ENDLUA
+
+" ========================
+" Auto-Commands
+" ========================
+
+lua << ENDLUA
+vim.cmd('autocmd BufWritePre *.rs silent Neoformat rustfmt')
+
+-- Set specific options for file types
+vim.cmd("autocmd FileType make setlocal noexpandtab")
+vim.cmd("autocmd FileType python setlocal expandtab")
+vim.cmd("autocmd FileType coffee setlocal noexpandtab")
+vim.cmd("autocmd FileType php setlocal noexpandtab")
+
+-- Set file type for specific file extension
+vim.cmd("autocmd BufRead,BufNewFile *.g4 set filetype=antlr4")
+
+-- autocmd to run :COQnow when opening filetypes with supported language servers
+vim.cmd [[
+  augroup COQnow
+    autocmd!
+    autocmd FileType go,python,javascript,typescript,tsx,rust :COQnow -s
+  augroup END
+]]
+
+ENDLUA
+
+autocmd VimEnter * GitGutterSignsDisable
+autocmd VimEnter * GitGutterLineHighlightsEnable
+
+" run Prettier before saving for these file types
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad,*.html Prettier
+
+autocmd BufWritePre *.py execute ':call Black()'
+
+" re-open files at old line
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+  \| exe "normal! g'\"" | endif
+
+autocmd BufRead *
+  \ call FollowSymlink() |
+  \ call SetProjectRoot()
