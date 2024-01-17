@@ -9,7 +9,7 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 
 #stty -ixon
 
-alias ls='gls -hl --color=auto'
+alias ls='ls -Ghl'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
 alias bfsh="~/butterfish/bin/butterfish shell -m gpt-3.5-turbo-1106 -v"
@@ -39,7 +39,7 @@ alias configure='colorify ./configure'
 alias diff='colorify diff'
 alias make='colorify make'
 
-eval $(/opt/homebrew/bin/brew shellenv)
+eval $(brew shellenv)
 
 
 export NVM_DIR="$HOME/.nvm"

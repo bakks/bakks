@@ -39,7 +39,7 @@ plugins = {
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
     {'averms/black-nvim', build = ':UpdateRemotePlugins'},
-    {'bakks/butterfish.nvim', dir = '~/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
+    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
 }
