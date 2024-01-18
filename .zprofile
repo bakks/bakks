@@ -12,16 +12,10 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 alias ls='ls -Ghl'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
-alias bfsh="~/butterfish/bin/butterfish shell -m gpt-3.5-turbo-1106 -v"
+alias bfsh="butterfish shell -m gpt-4-1106-preview -v"
 
 setopt share_history
 
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
 
 PROMPT=$'%F{magenta}%~ %(?.%F{green}.%F{red})ᐅ%F{white} '
 
@@ -46,4 +40,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-#source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+
