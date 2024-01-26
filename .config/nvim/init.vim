@@ -37,7 +37,6 @@ plugins = {
     {'ms-jpq/coq.artifacts', branch = 'artifacts'},
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
-    {'averms/black-nvim', build = ':UpdateRemotePlugins'},
     {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
@@ -401,7 +400,9 @@ end
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.black.with({
+      extra_args = { "--line-length", "100" },
+    }),
     null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.ruff,
     null_ls.builtins.diagnostics.ruff,
@@ -493,13 +494,6 @@ nmap ll :Copilot panel<CR>
 let g:gitgutter_enabled = 1
 set signcolumn=no
 
-
-" Black formatter
-
-let g:black#settings = {
-    \ 'fast': 1,
-    \ 'line_length': 100
-\}
 
 
 " ========================
