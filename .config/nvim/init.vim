@@ -1,11 +1,10 @@
-let g:python3_host_prog = $HOME . '/.local/venv/nvim/bin/python'
 """"""
 " Python setup
 " mkdir -p ~/.local/venv && cd ~/.local/venv
 " python3 -m venv nvim
 " cd nvim
 " . ./bin/activate
-" pip install pynvim black
+" pip install pynvim black neovim isort
 
 
 
@@ -42,6 +41,7 @@ plugins = {
     {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
+    {'jose-elias-alvarez/null-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
 }
 
 -- Bootstrap lazy plugin manager
@@ -273,7 +273,6 @@ ENDLUA
 
 let g:fzf_action = { 'enter': 'tab split' }
 let $FZF_DEFAULT_OPTS = '--bind ctrl-t:down,ctrl-n:up'
-
 let g:jsx_ext_required = 0
 
 lua << END
@@ -351,16 +350,63 @@ vim.g.coq_settings = {
 }
 
 local lspconfig = require('lspconfig')
-lspconfig.rust_analyzer.setup({})
 
--- Enable some language servers with the additional completion capabilities offered by coq_nvim
-local servers = { 'gopls', 'pyright', 'tsserver', 'rust_analyzer' }
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup(require('coq').lsp_ensure_capabilities({
+lspconfig.gopls.setup(require('coq').lsp_ensure_capabilities({
+  on_attach = lsp_keybinds,
+  flags = lsp_flags,
+}))
+
+lspconfig.tsserver.setup(require('coq').lsp_ensure_capabilities({
+  on_attach = lsp_keybinds,
+  flags = lsp_flags,
+}))
+
+lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
+  on_attach = lsp_keybinds,
+  flags = lsp_flags,
+}))
+
+
+-- Pyright LSP configuration
+
+-- Path to the virtual environment
+local venv_path = os.getenv('VIRTUAL_ENV')
+
+if venv_path == nil then
+  lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
+    on_attach = lsp_keybinds,
+    flags = lsp_flags,
+  }))
+else
+  print('Using virtual environment at ' .. venv_path)
+  lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
+    settings = {
+      python = {
+        analysis = {
+          autoImportCompletions = true,
+          autoSearchPaths = true, -- Automatically add search paths from your Python environment
+          diagnosticMode = "workspace", -- Perform diagnostics on files in your workspace
+          useLibraryCodeForTypes = true, -- Use library implementations to extract type information
+          typeCheckingMode = "off", -- off, basic, strict
+        },
+        pythonPath = venv_path .. '/bin/python', -- Path to the Python interpreter within your virtual environment
+      }
+    },
     on_attach = lsp_keybinds,
     flags = lsp_flags,
   }))
 end
+
+-- Use null-ls.nvim to help configure LSP
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.ruff,
+    null_ls.builtins.diagnostics.ruff,
+  },
+})
 
 
 
@@ -446,6 +492,14 @@ nmap ll :Copilot panel<CR>
 
 let g:gitgutter_enabled = 1
 set signcolumn=no
+
+
+" Black formatter
+
+let g:black#settings = {
+    \ 'fast': 1,
+    \ 'line_length': 100
+\}
 
 
 " ========================
@@ -559,6 +613,13 @@ vim.cmd [[
   augroup END
 ]]
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.py",
+  callback = function()
+    vim.lsp.buf.format({async = false})
+  end,
+})
+
 ENDLUA
 
 autocmd VimEnter * GitGutterSignsDisable
@@ -568,7 +629,6 @@ autocmd VimEnter * GitGutterLineHighlightsEnable
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.railroad,*.html Prettier
 
-autocmd BufWritePre *.py execute ':call Black()'
 
 " re-open files at old line
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
