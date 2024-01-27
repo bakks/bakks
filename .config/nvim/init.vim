@@ -4,7 +4,7 @@
 " python3 -m venv nvim
 " cd nvim
 " . ./bin/activate
-" pip install pynvim black neovim isort
+" pip install pynvim black neovim isort mypy
 
 
 
@@ -40,7 +40,7 @@ plugins = {
     {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
-    {'jose-elias-alvarez/null-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
+    {'nvimtools/none-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
 }
 
 -- Bootstrap lazy plugin manager
@@ -377,7 +377,6 @@ if venv_path == nil then
     flags = lsp_flags,
   }))
 else
-  print('Using virtual environment at ' .. venv_path)
   lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
     settings = {
       python = {
@@ -386,7 +385,7 @@ else
           autoSearchPaths = true, -- Automatically add search paths from your Python environment
           diagnosticMode = "workspace", -- Perform diagnostics on files in your workspace
           useLibraryCodeForTypes = true, -- Use library implementations to extract type information
-          typeCheckingMode = "off", -- off, basic, strict
+          typeCheckingMode = "basic", -- off, basic, strict
         },
         pythonPath = venv_path .. '/bin/python', -- Path to the Python interpreter within your virtual environment
       }
@@ -397,6 +396,7 @@ else
 end
 
 -- Use null-ls.nvim to help configure LSP
+local utils = require("null-ls.utils")
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
