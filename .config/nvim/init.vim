@@ -41,6 +41,7 @@ plugins = {
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
     {'nvimtools/none-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
+    'tpope/vim-fugitive',
 }
 
 -- Bootstrap lazy plugin manager
@@ -258,6 +259,9 @@ function lsp_keybinds(client, bufnr)
   keybind('n', 'cr', vim.lsp.buf.references, 'Find references')
   keybind('n', 'cf', vim.lsp.buf.formatting, 'Format code')
 end
+
+-- vim-fugitive
+keybind('n', 'cb', ':Git blame<CR>', 'Open git blame pane')
 
 -- fzf
 keybind('n', '<C-p>', ':GitFiles<CR>', 'ctrl-p to open FZF finder')
@@ -548,6 +552,12 @@ ENDLUA
 " or directory of current file if not git project
 " http://inlehmansterms.net/2014/09/04/sane-vim-working-directories/
 function! SetProjectRoot()
+  " if full path does not start with /, exit
+  "  (i.e. if it's a relative path or a protocol:// URL)
+  if expand("%:p:h") !~ '^/'
+    return
+  endif
+
   " default to the current file's directory
   lcd %:p:h
   let git_dir = system("git rev-parse --show-toplevel")
