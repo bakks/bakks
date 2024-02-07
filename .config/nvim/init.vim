@@ -523,6 +523,12 @@ color_overrides = {
   GitGutterChangeLine = { bg = '#202020' },
   GitGutterDeleteLine = { bg = 'none' },
   GitGutterChangeDeleteLine = { bg = 'none' },
+  -- background for highlighted text
+  Search = { bg = '#ff5ea0' }, -- pink
+  IncSearch = { bg = '#ff5ea0' }, -- pink
+  CurSearch = { bg = '#ff5ea0' }, -- pink
+  Visual = { bg = '#ff5ea0' }, -- pink
+  CursorLine = { bg = '#ff5ea0' }, -- pink
 }
 
 require("cyberdream").setup({
