@@ -97,7 +97,9 @@ vim.opt.statusline = "%1*%<%F" ..   -- File+path
                      " %=" ..       -- Filler
                      "%1*%m%r%w" .. -- Modified? Readonly?
                      " %l/%L:%02c"  -- Row/total:column
-                     
+
+
+
 ENDLUA
 
 " ========================
@@ -546,7 +548,7 @@ end
 
 vim.cmd [[syntax on]]
 vim.cmd [[colorscheme cyberdream]]
-vim.cmd [[set colorcolumn=80]]
+vim.cmd [[set colorcolumn=80,100]]
 ENDLUA
 
 
