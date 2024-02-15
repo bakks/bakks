@@ -23,7 +23,7 @@ brew install bakks/bakks/poptop bakks/bakks/butterfish
 go install github.com/boyter/cs@v1.3.0
 
 # npm packages
-npm install -g typescript typescript-language-server pyright
+npm install -g typescript typescript-language-server pyright prettier
 
 gh auth login
 
