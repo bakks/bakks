@@ -42,6 +42,7 @@ plugins = {
     'sbdchd/neoformat',
     {'nvimtools/none-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
     'tpope/vim-fugitive',
+    'almo7aya/openingh.nvim'
 }
 
 -- Bootstrap lazy plugin manager
@@ -266,7 +267,12 @@ end
 keybind('n', 'cb', ':Git blame<CR>', 'Open git blame pane')
 
 -- fzf
-keybind('n', '<C-p>', ':GitFiles<CR>', 'ctrl-p to open FZF finder')
+keybind('n', '<C-p>', ':GitFiles<CR>', 'Open FZF finder')
+
+-- openingh.nvim
+-- opens a line/range in github
+keybind('n', 'cg', ':OpenInGHFileLines<CR>', 'npen line in github')
+keybind('v', 'cg', ':OpenInGHFileLines<CR>', 'npen line in github')
 
 
 
