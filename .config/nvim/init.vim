@@ -290,7 +290,7 @@ lua << END
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform" },
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml" },
   highlight = {
     enable = true,
   },
