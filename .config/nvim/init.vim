@@ -271,8 +271,8 @@ keybind('n', '<C-p>', ':GitFiles<CR>', 'Open FZF finder')
 
 -- openingh.nvim
 -- opens a line/range in github
-keybind('n', 'cg', ':OpenInGHFileLines<CR>', 'npen line in github')
-keybind('v', 'cg', ':OpenInGHFileLines<CR>', 'npen line in github')
+keybind('n', 'cg', ':OpenInGHFileLines<CR>', 'Open line in github')
+keybind('v', 'cg', ':OpenInGHFileLines<CR>', 'Open line in github')
 
 
 
@@ -290,7 +290,7 @@ lua << END
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python" },
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform" },
   highlight = {
     enable = true,
   },
