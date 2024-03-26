@@ -218,8 +218,8 @@ keybind('n', ',q', ':BFQuestion ',     ',q to ask a question')
 keybind('v', ',q', ':BFQuestion ',     ',q to ask a question about a block')
 
 -- nvim-tree
-keybind('n', 'P', ':NvimTreeToggle<CR>', 'P to toggle file tree')
-keybind('v', 'P', ':NvimTreeToggle<CR>', 'P to toggle file tree')
+keybind('n', 'P', ':Tree<CR>', 'P to toggle file tree')
+keybind('v', 'P', ':Tree<CR>', 'P to toggle file tree')
 
 function nvim_tree_keybinds(bufnr)
   local api = require('nvim-tree.api')
@@ -313,8 +313,22 @@ require'nvim-web-devicons'.setup {
  default = true,
 }
 
+
+vim.api.nvim_create_user_command('Tree', function()
+  local api = require("nvim-tree.api")
+  local global_cwd = vim.fn.getcwd(-1, -1)
+  api.tree.toggle({find_file = true, path = global_cwd})
+end, {})
+
+
 require("nvim-tree").setup({
   on_attach = nvim_tree_keybinds,
+  git = {
+    enable = false,
+  },
+  view = {
+    width = 36,
+  },
 })
 
 
@@ -410,10 +424,32 @@ end
 -- Use null-ls.nvim to help configure LSP
 local utils = require("null-ls.utils")
 local null_ls = require("null-ls")
+extra_args = { "--line-length", "100" }
+
+-- if .isort.cfg exists, use it
+-- Check if the current directory has a file with the given name
+local function file_exists(filename)
+  local f = io.open(filename, "r")
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
+
+-- Check if the root directory has the ".isort.cfg" file and add extra arguments if it does
+if file_exists(".isort.cfg") then
+  table.insert(extra_args, "--settings-path")
+  full_path = vim.fn.getcwd() .. "/.isort.cfg"
+  table.insert(extra_args, full_path)
+  print("Using .isort.cfg")
+end
+
 null_ls.setup({
   sources = {
     null_ls.builtins.formatting.black.with({
-      extra_args = { "--line-length", "100" },
+      extra_args = extra_args,
     }),
     null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.ruff,
