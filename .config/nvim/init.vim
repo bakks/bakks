@@ -386,6 +386,11 @@ lspconfig.tsserver.setup(require('coq').lsp_ensure_capabilities({
   flags = lsp_flags,
 }))
 
+lspconfig.html.setup(require('coq').lsp_ensure_capabilities({
+  on_attach = lsp_keybinds,
+  flags = lsp_flags,
+}))
+
 lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
