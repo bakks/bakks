@@ -28,6 +28,9 @@ bindkey "^h" backward-char
 bindkey "^s" forward-char
 bindkey "»" forward-char
 
+bindkey "^a" beginning-of-line
+bindkey "^e" end-of-line
+
 # Color some common commands
 alias colorify="grc -es --colour=auto"
 alias configure='colorify ./configure'
