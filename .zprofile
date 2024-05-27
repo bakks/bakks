@@ -12,7 +12,7 @@ export LS_COLORS="di=34;40:ln=36;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43
 alias ls='ls -Ghl'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
-alias bfsh="butterfish shell -m gpt-4-turbo -vA -H1024"
+alias bfsh="butterfish shell -vA -H1024"
 export EDITOR=$(/usr/bin/which nvim)
 
 setopt share_history
