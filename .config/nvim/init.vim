@@ -36,7 +36,7 @@ plugins = {
     {'ms-jpq/coq.artifacts', branch = 'artifacts'},
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
-    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'},  dir='/Users/pbakkum/butterfish.nvim'},
+    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'},  dir='~/butterfish.nvim'},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
     {'nvimtools/none-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
@@ -251,15 +251,14 @@ function lsp_keybinds(client, bufnr)
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   opt = { noremap = true, silent = true, buffer = bufnr }
 
-  keybind('n', 'cd', vim.lsp.buf.definition, 'Go to definition')
-  keybind('n', 'cD', vim.lsp.buf.type_definition, 'Go to type definition')
-  keybind('n', 'ck', vim.lsp.buf.hover, 'Show hover information')
-  keybind('n', 'ci', vim.lsp.buf.implementation, 'Go to implementation')
-  keybind('n', 'cs', vim.lsp.buf.signature_help, 'Show signature help')
-  keybind('n', 'cR', vim.lsp.buf.rename, 'Rename symbol')
-  keybind('n', 'cca', vim.lsp.buf.code_action, 'Code action')
-  keybind('n', 'cr', vim.lsp.buf.references, 'Find references')
-  keybind('n', 'cf', vim.lsp.buf.formatting, 'Format code')
+  keybind('n', 'cd', vim.lsp.buf.definition, 'Go to definition', opt)
+  keybind('n', 'cD', vim.lsp.buf.type_definition, 'Go to type definition', opt)
+  keybind('n', 'ck', vim.lsp.buf.hover, 'Show hover information', opt)
+  keybind('n', 'ci', vim.lsp.buf.implementation, 'Go to implementation', opt)
+  keybind('n', 'cs', vim.lsp.buf.signature_help, 'Show signature help', opt)
+  keybind('n', 'cR', vim.lsp.buf.rename, 'Rename symbol', opt)
+  keybind('n', 'cca', vim.lsp.buf.code_action, 'Code action', opt)
+  keybind('n', 'cr', vim.lsp.buf.references, 'Find references', opt)
 end
 
 -- vim-fugitive
@@ -400,6 +399,9 @@ lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
 
 -- Path to the virtual environment
 local venv_path = os.getenv('VIRTUAL_ENV')
+if venv_path == nil then
+  venv_path = os.getenv('HOME') .. '/.local/venv/nvim'
+end
 
 local on_attach = function(client, bufnr)
     -- Disable hover in favor of Pyright
