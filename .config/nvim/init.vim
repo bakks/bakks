@@ -4,8 +4,7 @@
 " python3 -m venv nvim
 " cd nvim
 " . ./bin/activate
-" pip install pynvim black neovim isort mypy
-
+" pip install pynvim neovim mypy ruff-lsp
 
 
 " ========================
@@ -37,7 +36,7 @@ plugins = {
     {'ms-jpq/coq.artifacts', branch = 'artifacts'},
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
-    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'}},
+    {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'},  dir='/Users/pbakkum/butterfish.nvim'},
     'scottmckendry/cyberdream.nvim',
     'sbdchd/neoformat',
     {'nvimtools/none-ls.nvim', dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}},
@@ -402,6 +401,12 @@ lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
 -- Path to the virtual environment
 local venv_path = os.getenv('VIRTUAL_ENV')
 
+local on_attach = function(client, bufnr)
+    -- Disable hover in favor of Pyright
+    client.server_capabilities.hoverProvider = false
+    lsp_keybinds(client, bufnr)
+end
+
 if venv_path == nil then
   lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
     on_attach = lsp_keybinds,
@@ -410,6 +415,9 @@ if venv_path == nil then
 else
   lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
     settings = {
+      pyright = {
+        disableOrganizeImports = false,
+      },
       python = {
         analysis = {
           autoImportCompletions = true,
@@ -426,42 +434,16 @@ else
   }))
 end
 
--- Use null-ls.nvim to help configure LSP
-local utils = require("null-ls.utils")
-local null_ls = require("null-ls")
-extra_args = { "--line-length", "100" }
-
--- if .isort.cfg exists, use it
--- Check if the current directory has a file with the given name
-local function file_exists(filename)
-  local f = io.open(filename, "r")
-  if f ~= nil then
-    io.close(f)
-    return true
-  else
-    return false
-  end
-end
-
--- Check if the root directory has the ".isort.cfg" file and add extra arguments if it does
-if file_exists(".isort.cfg") then
-  table.insert(extra_args, "--settings-path")
-  full_path = vim.fn.getcwd() .. "/.isort.cfg"
-  table.insert(extra_args, full_path)
-  print("Using .isort.cfg")
-end
-
-null_ls.setup({
-  sources = {
-    null_ls.builtins.formatting.black.with({
-      extra_args = extra_args,
-    }),
-    null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.ruff,
-    null_ls.builtins.diagnostics.ruff,
-  },
-})
-
+lspconfig.ruff_lsp.setup(require('coq').lsp_ensure_capabilities({
+    on_attach = on_attach,
+    flags = lsp_flags,
+    init_options = {
+        settings = {
+            -- Any extra CLI arguments for `ruff` go here.
+            args = extra_args,
+        }
+    }
+}))
 
 
 local function bufwinid(bufnr)
@@ -672,12 +654,25 @@ vim.cmd [[
   augroup END
 ]]
 
+-- Create an autocmd group for Python file formatting and linting
+vim.api.nvim_create_augroup('PythonAutoGroup', {})
+
+-- Format Python files before saving
 vim.api.nvim_create_autocmd("BufWritePre", {
+  group = 'PythonAutoGroup',
   pattern = "*.py",
   callback = function()
     vim.lsp.buf.format({async = false})
   end,
 })
+
+-- Run ruff linting and fixing after saving Python files
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = 'PythonAutoGroup',
+  pattern = "*.py",
+  command = "silent! !ruff check --fix --select I %",
+})
+
 
 ENDLUA
 
