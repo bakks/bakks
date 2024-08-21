@@ -4,7 +4,7 @@
 
 [user]
 	name = Peter Bakkum
-	email = pbbakkum@gmail.com
+	email = pbakkum@openai.com
 
 [push]
         default = simple
@@ -24,6 +24,8 @@
   up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
   prp = !sh -c 'git pull --rebase && git push'
   gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
+  acp = "!f() { git add . && git commit -m \"$1\" && git push; }; f"
+
 
 [init]
 	defaultBranch = main

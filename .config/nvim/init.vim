@@ -448,6 +448,43 @@ lspconfig.ruff_lsp.setup(require('coq').lsp_ensure_capabilities({
 }))
 
 
+
+-- Use null-ls.nvim to help configure LSP
+local null_ls = require("null-ls")
+extra_args = { "--line-length", "100" }
+
+-- if .isort.cfg exists, use it
+-- Check if the current directory has a file with the given name
+local function file_exists(filename)
+  local f = io.open(filename, "r")
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
+
+-- Check if the root directory has the ".isort.cfg" file and add extra arguments if it does
+if file_exists(".isort.cfg") then
+  table.insert(extra_args, "--settings-path")
+  full_path = vim.fn.getcwd() .. "/.isort.cfg"
+  table.insert(extra_args, full_path)
+  print("Using .isort.cfg")
+end
+
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.black.with({
+      extra_args = extra_args,
+    }),
+    null_ls.builtins.formatting.isort,
+  },
+})
+
+
+
+
 local function bufwinid(bufnr)
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_buf(win) == bufnr then
@@ -672,7 +709,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = 'PythonAutoGroup',
   pattern = "*.py",
-  command = "silent! !ruff check --fix --select I %",
+  command = "silent! !ruff check --fix --ignore I001,I004 %",
 })
 
 
@@ -693,3 +730,8 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 autocmd BufRead *
   \ call FollowSymlink() |
   \ call SetProjectRoot()
+
+lua << EOF
+vim.lsp.set_log_level("debug")
+EOF
+

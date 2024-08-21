@@ -32,10 +32,10 @@ bindkey "^a" beginning-of-line
 bindkey "^e" end-of-line
 
 # Color some common commands
-alias colorify="grc -es --colour=auto"
-alias configure='colorify ./configure'
-alias diff='colorify diff'
-alias make='colorify make'
+#alias colorify="grc -es --colour=auto"
+#alias configure='colorify ./configure'
+#alias diff='colorify diff'
+#alias make='colorify make'
 
 eval $(brew shellenv)
 
@@ -45,3 +45,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 
+source /Users/pbakkum/.brix/profile
