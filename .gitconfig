@@ -25,6 +25,7 @@
   prp = !sh -c 'git pull --rebase && git push'
   gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
   acp = "!f() { git add . && git commit -m \"$1\" && git push; }; f"
+  mm  = !sh -c 'git fetch origin master && git merge origin/master && git push'
 
 
 [init]

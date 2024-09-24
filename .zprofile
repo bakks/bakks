@@ -13,6 +13,10 @@ alias ls='ls -Ghl'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
 alias bfsh="butterfish shell -vA -H1024"
+
+alias pt="pytest -p no:warnings --timeout=10"
+alias pw="ptw -- --timeout=10 -p no:warnings"
+
 export EDITOR=$(/usr/bin/which nvim)
 
 setopt share_history
