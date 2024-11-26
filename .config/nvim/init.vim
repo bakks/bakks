@@ -289,7 +289,7 @@ lua << END
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml" },
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml", "markdown", "markdown_inline" },
   highlight = {
     enable = true,
   },
@@ -380,7 +380,7 @@ lspconfig.gopls.setup(require('coq').lsp_ensure_capabilities({
   flags = lsp_flags,
 }))
 
-lspconfig.tsserver.setup(require('coq').lsp_ensure_capabilities({
+lspconfig.ts_ls.setup(require('coq').lsp_ensure_capabilities({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
 }))
@@ -437,7 +437,9 @@ else
   }))
 end
 
-lspconfig.ruff_lsp.setup(require('coq').lsp_ensure_capabilities({
+extra_args = { "--line-length", "100" }
+
+lspconfig.ruff.setup(require('coq').lsp_ensure_capabilities({
     on_attach = on_attach,
     flags = lsp_flags,
     init_options = {
@@ -452,7 +454,6 @@ lspconfig.ruff_lsp.setup(require('coq').lsp_ensure_capabilities({
 
 -- Use null-ls.nvim to help configure LSP
 local null_ls = require("null-ls")
-extra_args = { "--line-length", "100" }
 
 -- if .isort.cfg exists, use it
 -- Check if the current directory has a file with the given name
@@ -715,6 +716,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 
 ENDLUA
+
+au BufRead,BufNewFile */mdx set filetype=markdown
 
 autocmd VimEnter * GitGutterSignsDisable
 autocmd VimEnter * GitGutterLineHighlightsEnable
