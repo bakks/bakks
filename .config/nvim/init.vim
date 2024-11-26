@@ -239,9 +239,18 @@ function nvim_tree_keybinds(bufnr)
 end
 
 -- LSP
+function goto_next_error()
+  local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+  if #diagnostics > 0 then
+    vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+  else
+    print("No more error diagnostics")
+  end
+end
+
 keybind('n', 'ce', vim.diagnostic.open_float, 'ce to open floating error desc')
-keybind('n', 'ct', vim.diagnostic.goto_next,  'ct to go to next error')
-keybind('n', 'cn', vim.diagnostic.goto_prev,  'cn to go to previous error')
+keybind('n', 'ct', goto_next_error,           'ct to go to next error')
+keybind('n', 'cn', vim.diagnostic.goto_prev,  'cn to go to previous diagnostic')
 
 -- nvim-lspconfig
 
