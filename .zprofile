@@ -15,7 +15,7 @@ alias bf="~/butterfish/bin/butterfish"
 alias bfsh="butterfish shell -vA -H1024"
 
 alias pt="pytest -p no:warnings --timeout=10"
-alias pw="ptw -- --timeout=10 -p no:warnings"
+alias pw="ptw --now . -- --timeout=10 -p no:warnings"
 
 export EDITOR=$(/usr/bin/which nvim)
 
