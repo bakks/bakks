@@ -7,12 +7,13 @@
 	email = pbakkum@openai.com
 
 [push]
-        default = simple
+	default = simple
+	autoSetupRemote = true
 
 # http://stackoverflow.com/questions/18257622/why-is-git-core-preloadindex-default-value-false
 [core]
-  preloadindex = true
-  editor = /usr/bin/env nvim
+	preloadindex = true
+	editor = /usr/bin/env nvim
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -21,12 +22,11 @@
 	required = true
 
 [alias]
-  up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
-  prp = !sh -c 'git pull --rebase && git push'
-  gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
-  acp = "!f() { git add . && git commit -m \"$1\" && git push; }; f"
-  mm  = !sh -c 'git fetch origin master && git merge origin/master && git push'
-
+	up = !sh -c 'git pull --prune && git submodule update --init --recursive && git submodule sync'
+	prp = !sh -c 'git pull --rebase && git push'
+	gpsu = !sh -c 'git push -u origin `git rev-parse --abbrev-ref HEAD`'
+	acp = "!f() { git add . && git commit -m \"$1\" && git push; }; f"
+	mm = !sh -c 'git fetch origin master && git merge origin/master && git push'
 
 [init]
 	defaultBranch = main
