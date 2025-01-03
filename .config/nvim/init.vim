@@ -5,6 +5,9 @@
 " cd nvim
 " . ./bin/activate
 " pip install pynvim neovim mypy ruff-lsp
+"
+" Go setup
+" go install golang.org/x/tools/gopls@latest
 
 
 " ========================
@@ -267,7 +270,7 @@ function lsp_keybinds(client, bufnr)
   keybind('n', 'ci', vim.lsp.buf.implementation, 'Go to implementation', opt)
   keybind('n', 'cs', vim.lsp.buf.signature_help, 'Show signature help', opt)
   keybind('n', 'cR', vim.lsp.buf.rename, 'Rename symbol', opt)
-  keybind('n', 'cca', vim.lsp.buf.code_action, 'Code action', opt)
+  keybind('n', 'cx', vim.lsp.buf.code_action, 'Code action', opt)
   keybind('n', 'cr', vim.lsp.buf.references, 'Find references', opt)
 end
 
@@ -280,7 +283,7 @@ keybind('n', '<C-p>', ':GitFiles<CR>', 'Open FZF finder')
 -- openingh.nvim
 -- opens a line/range in github
 keybind('n', 'cg', ':OpenInGHFileLines<CR>', 'Open line in github')
-keybind('v', 'cg', ':OpenInGHFileLines<CR>', 'Open line in github')
+keybind('v', 'cg', ':OpenInGHFileLines<CR>', 'Open lines in github')
 
 
 
@@ -357,7 +360,7 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = '',
     recommended = false,
-    manual_complete = 'ç',
+    manual_complete = '<C-c>',
   },
 
   clients = {
@@ -403,7 +406,6 @@ lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
 }))
-
 
 -- Pyright LSP configuration
 
@@ -565,6 +567,7 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
+" let g:go_debug=['lsp']
 
 " Github copilot
 
@@ -738,6 +741,7 @@ autocmd BufRead *
   \ call FollowSymlink() |
   \ call SetProjectRoot()
 
+" LSP log is at ~/.cache/nvim/lsp.log
 lua << EOF
 vim.lsp.set_log_level("debug")
 EOF
