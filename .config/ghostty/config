@@ -1,0 +1,76 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /Users/pbakkum/Library/Application Support/com.mitchellh.ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Config syntax crash course
+# ==========================
+# # The config file consists of simple key-value pairs,
+# # separated by equals signs.
+# font-family = Iosevka
+# window-padding-x = 2
+#
+# # Spacing around the equals sign does not matter.
+# # All of these are identical:
+# key=value
+# key= value
+# key =value
+# key = value
+#
+# # Any line beginning with a # is a comment. It's not possible to put
+# # a comment after a config option, since it would be interpreted as a
+# # part of the value. For example, this will have a value of "#123abc":
+# background = #123abc
+#
+# # Empty values are used to reset config keys to default.
+# key =
+#
+# # Some config options have unique syntaxes for their value,
+# # which is explained in the docs for that config option.
+# # Just for example:
+# resize-overlay-duration = 4s 200ms
+
+
+# bold-is-bright = true
+cursor-color = #ff00ff 
+# theme = light:Builtin Solarized Light,dark:Github-Dark-High-Contrast
+theme = 
+keybind = ctrl+s=text:\xbb
+keybind = ctrl+m=text:\xbc
+font-family = Menlo
+
+# cyberdream theme for ghostty
+palette = 0=#16181a
+palette = 1=#ff6e5e
+palette = 2=#5eff6c
+palette = 3=#f1ff5e
+palette = 4=#5ea1ff
+palette = 5=#bd5eff
+palette = 6=#5ef1ff
+palette = 7=#ffffff
+palette = 8=#3c4048
+palette = 9=#ff6e5e
+palette = 10=#5eff6c
+palette = 11=#f1ff5e
+palette = 12=#5ea1ff
+palette = 13=#bd5eff
+palette = 14=#5ef1ff
+palette = 15=#ffffff
+
+background = #000000
+foreground = #ffffff
+# cursor-color = #ffffff
+selection-background = #3c4048
+selection-foreground = #ffffff
