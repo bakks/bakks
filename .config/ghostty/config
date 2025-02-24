@@ -50,6 +50,8 @@ theme =
 keybind = ctrl+s=text:\xbb
 keybind = ctrl+m=text:\xbc
 font-family = Menlo
+font-thicken = true
+font-thicken-strength = 200
 
 # cyberdream theme for ghostty
 palette = 0=#16181a
