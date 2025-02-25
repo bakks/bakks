@@ -611,7 +611,7 @@ color_overrides = {
 
 require("cyberdream").setup({
   italic_comments = true,
-  theme = { highlights = color_overrides, },
+  highlights = color_overrides,
 })
 
 -- Override LSP floating window config to add rounded border
