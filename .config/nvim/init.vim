@@ -4,7 +4,7 @@
 " python3 -m venv nvim
 " cd nvim
 " . ./bin/activate
-" pip install pynvim neovim mypy ruff-lsp
+" pip install pynvim neovim mypy ruff-lsp isort black
 "
 " Go setup
 " go install golang.org/x/tools/gopls@latest
@@ -18,9 +18,9 @@
 " Lazy install
 " Lazy update
 " TSUpdate
-" COQdeps
 " UpdateRemotePlugins
 " Copilot status
+" checkhealth
 
 lua << ENDLUA
 plugins = {
@@ -35,8 +35,6 @@ plugins = {
     'neovim/nvim-lspconfig',
     {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate'},
     'mhinz/vim-startify',
-    {'ms-jpq/coq_nvim', branch = 'coq'},
-    {'ms-jpq/coq.artifacts', branch = 'artifacts'},
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
     {'bakks/butterfish.nvim', dependencies = {'tpope/vim-commentary'},  dir='~/butterfish.nvim'},
@@ -63,13 +61,11 @@ vim.opt.rtp:prepend(lazypath)
 
 -- load lazy plugin manager
 require('lazy').setup(plugins)
-ENDLUA
 
-" ==========================
-" Basic Neovim Configuration
-" ==========================
+-- ==========================
+-- Basic Neovim Configuration
+-- ==========================
 
-lua << ENDLUA
 -- Set options
 vim.opt.autoindent = true
 vim.opt.smartindent = true
@@ -103,13 +99,11 @@ vim.opt.statusline = "%1*%<%F" ..   -- File+path
 
 
 
-ENDLUA
 
-" ========================
-" Basic Key Bindings
-" ========================
+-- ========================
+-- Basic Key Bindings
+-- ========================
 
-lua << ENDLUA
 
 -- Assumptions:
 --   » is ctrl-s, mapped in terminal
@@ -257,6 +251,62 @@ keybind('n', 'cn', vim.diagnostic.goto_prev,  'cn to go to previous diagnostic')
 
 -- nvim-lspconfig
 
+local function jump_callback(err, result, ctx, config)
+  print("on_definition")
+  if err then
+    vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
+    return
+  end
+  if not result or vim.tbl_isempty(result) then
+    vim.notify("No definition found", vim.log.levels.WARN)
+    return
+  end
+
+  -- Open definition in a new tab if not already open
+  local uri = result[1].uri or result.uri
+  local bufnr = vim.uri_to_bufnr(uri)
+  if vim.fn.bufloaded(bufnr) == 0 then
+    vim.cmd('tabnew')
+  end
+
+  -- Use the correct API to jump to the location
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  if not client then
+    vim.notify("LSP client not found", vim.log.levels.ERROR)
+  end
+  r = vim.lsp.util.show_document(result[1], client.offset_encoding, { reuse_win = true })
+end
+
+function lsp_goto_definition()
+  -- Request LSP definition with correct position encoding
+  local client = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })[1]
+
+  if not client then
+    vim.notify("No LSP client found", vim.log.levels.ERROR)
+    return
+  end
+
+  local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+  params.position_encoding = client.offset_encoding
+  vim.lsp.buf_request(0, 'textDocument/definition', params, jump_callback)
+end
+
+function lsp_goto_type_definition()
+  -- Request LSP type definition with correct position encoding
+  local client = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })[1]
+
+  if not client then
+    vim.notify("No LSP client found", vim.log.levels.ERROR)
+    return
+  end
+
+  local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+  params.position_encoding = client.offset_encoding
+  vim.lsp.buf_request(0, 'textDocument/typeDefinition', params, jump_callback)
+end
+
+
+
 function lsp_keybinds(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -264,8 +314,8 @@ function lsp_keybinds(client, bufnr)
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   opt = { noremap = true, silent = true, buffer = bufnr }
 
-  keybind('n', 'cd', vim.lsp.buf.definition, 'Go to definition', opt)
-  keybind('n', 'cD', vim.lsp.buf.type_definition, 'Go to type definition', opt)
+  keybind('n', 'cd', lsp_goto_definition, 'Go to definition with tab logic', opt)
+  keybind('n', 'cD', lsp_goto_type_definition, 'Go to type definition', opt)
   keybind('n', 'ck', vim.lsp.buf.hover, 'Show hover information', opt)
   keybind('n', 'ci', vim.lsp.buf.implementation, 'Go to implementation', opt)
   keybind('n', 'cs', vim.lsp.buf.signature_help, 'Show signature help', opt)
@@ -273,6 +323,8 @@ function lsp_keybinds(client, bufnr)
   keybind('n', 'cx', vim.lsp.buf.code_action, 'Code action', opt)
   keybind('n', 'cr', vim.lsp.buf.references, 'Find references', opt)
 end
+
+
 
 -- vim-fugitive
 keybind('n', 'cb', ':Git blame<CR>', 'Open git blame pane')
@@ -349,64 +401,32 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
--- COQ (autocompletion) settings
-vim.g.coq_settings = {
-  auto_start = 'shut-up',
-
-  completion = {
-    always = false,
-  },
-
-  keymap = {
-    jump_to_mark = '',
-    recommended = false,
-    manual_complete = '<C-c>',
-  },
-
-  clients = {
-    tabnine = {
-      enabled = false,
-    }
-  },
-
-  display = {
-    ghost_text = {
-      enabled = true,
-    },
-    pum = {
-      fast_close = false,
-      y_max_len = 7,
-      kind_context = { "", "" },
-    },
-    preview = {
-      border = "solid",
-      positions = { east = 3, south = 2, north = 1, west = nil },
-    },
-  }
-}
 
 local lspconfig = require('lspconfig')
 
-lspconfig.gopls.setup(require('coq').lsp_ensure_capabilities({
+-- Setup for Go language server
+lspconfig.gopls.setup({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
-}))
+})
 
-lspconfig.ts_ls.setup(require('coq').lsp_ensure_capabilities({
+-- Setup for TypeScript language server
+lspconfig.ts_ls.setup({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
-}))
+})
 
-lspconfig.html.setup(require('coq').lsp_ensure_capabilities({
+-- Setup for HTML language server
+lspconfig.html.setup({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
-}))
+})
 
-lspconfig.rust_analyzer.setup(require('coq').lsp_ensure_capabilities({
+-- Setup for Rust language server
+lspconfig.rust_analyzer.setup({
   on_attach = lsp_keybinds,
   flags = lsp_flags,
-}))
-
+})
 -- Pyright LSP configuration
 
 -- Path to the virtual environment
@@ -414,6 +434,7 @@ local venv_path = os.getenv('VIRTUAL_ENV')
 if venv_path == nil then
   venv_path = os.getenv('HOME') .. '/.local/venv/nvim'
 end
+vim.g.python3_host_prog = venv_path .. '/bin/python'
 
 local on_attach = function(client, bufnr)
     -- Disable hover in favor of Pyright
@@ -421,36 +442,29 @@ local on_attach = function(client, bufnr)
     lsp_keybinds(client, bufnr)
 end
 
-if venv_path == nil then
-  lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
-    on_attach = lsp_keybinds,
-    flags = lsp_flags,
-  }))
-else
-  lspconfig.pyright.setup(require('coq').lsp_ensure_capabilities({
-    settings = {
-      pyright = {
-        disableOrganizeImports = false,
-      },
-      python = {
-        analysis = {
-          autoImportCompletions = true,
-          autoSearchPaths = true, -- Automatically add search paths from your Python environment
-          diagnosticMode = "workspace", -- Perform diagnostics on files in your workspace
-          useLibraryCodeForTypes = true, -- Use library implementations to extract type information
-          typeCheckingMode = "basic", -- off, basic, strict
-        },
-        pythonPath = venv_path .. '/bin/python', -- Path to the Python interpreter within your virtual environment
-      }
+lspconfig.pyright.setup({
+  settings = {
+    pyright = {
+      disableOrganizeImports = false,
     },
-    on_attach = lsp_keybinds,
-    flags = lsp_flags,
-  }))
-end
+    python = {
+      analysis = {
+        autoImportCompletions = true,
+        autoSearchPaths = true, -- Automatically add search paths from your Python environment
+        diagnosticMode = "workspace", -- Perform diagnostics on files in your workspace
+        useLibraryCodeForTypes = true, -- Use library implementations to extract type information
+        typeCheckingMode = "basic", -- off, basic, strict
+      },
+      pythonPath = venv_path .. '/bin/python', -- Path to the Python interpreter within your virtual environment
+    }
+  },
+  on_attach = lsp_keybinds,
+  flags = lsp_flags,
+})
 
 extra_args = { "--line-length", "100" }
 
-lspconfig.ruff.setup(require('coq').lsp_ensure_capabilities({
+lspconfig.ruff.setup({
     on_attach = on_attach,
     flags = lsp_flags,
     init_options = {
@@ -459,7 +473,7 @@ lspconfig.ruff.setup(require('coq').lsp_ensure_capabilities({
             args = extra_args,
         }
     }
-}))
+})
 
 
 
@@ -510,6 +524,7 @@ end
 -- to use tabs that are already open, and otherwise open a
 -- new one. Can probably be simplified.
 local jumpfn = function(err, result, ctx, config)
+  print("jumpfn")
   local client_encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
   if err then
     vim.notify(err.message)
@@ -546,7 +561,12 @@ vim.lsp.handlers["textDocument/typeDefinition"] = jumpfn
 
 -- Configure diagnostics
 -- Turn off left bar signs
-vim.diagnostic.config({ signs = false })
+vim.diagnostic.config({
+  signs = false,
+  virtual_lines = {
+    current_line = true,
+  },
+})
 
 END
 
@@ -693,13 +713,6 @@ vim.cmd("autocmd FileType php setlocal noexpandtab")
 -- Set file type for specific file extension
 vim.cmd("autocmd BufRead,BufNewFile *.g4 set filetype=antlr4")
 
--- autocmd to run :COQnow when opening filetypes with supported language servers
-vim.cmd [[
-  augroup COQnow
-    autocmd!
-    autocmd FileType go,python,javascript,typescript,tsx,rust :COQnow -s
-  augroup END
-]]
 
 -- Create an autocmd group for Python file formatting and linting
 vim.api.nvim_create_augroup('PythonAutoGroup', {})
@@ -742,7 +755,7 @@ autocmd BufRead *
   \ call SetProjectRoot()
 
 " LSP log is at ~/.cache/nvim/lsp.log
-lua << EOF
-vim.lsp.set_log_level("debug")
-EOF
+" lua << EOF
+" vim.lsp.set_log_level("debug")
+" EOF
 
