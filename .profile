@@ -29,3 +29,5 @@ complete -o default -o nospace -F _man vman
 
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+
+. "$HOME/.local/bin/env"
