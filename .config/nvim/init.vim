@@ -252,7 +252,6 @@ keybind('n', 'cn', vim.diagnostic.goto_prev,  'cn to go to previous diagnostic')
 -- nvim-lspconfig
 
 local function jump_callback(err, result, ctx, config)
-  print("on_definition")
   if err then
     vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
     return
@@ -263,7 +262,7 @@ local function jump_callback(err, result, ctx, config)
   end
 
   -- Open definition in a new tab if not already open
-  local uri = result[1].uri or result.uri
+  local uri = result[1].uri or result.uri or result[1].targetUri or result.targetUri
   local bufnr = vim.uri_to_bufnr(uri)
   if vim.fn.bufloaded(bufnr) == 0 then
     vim.cmd('tabnew')
