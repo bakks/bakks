@@ -562,9 +562,6 @@ vim.lsp.handlers["textDocument/typeDefinition"] = jumpfn
 -- Turn off left bar signs
 vim.diagnostic.config({
   signs = false,
-  virtual_lines = {
-    current_line = true,
-  },
 })
 
 END
