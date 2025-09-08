@@ -1,4 +1,56 @@
 #!/bin/bash
 
-find . -name "*" | xargs grep -sn "$@"
+# Fast "find in files" helper.
+# Fixes exclude handling for nested child directories by letting grep
+# perform the recursion (so --exclude-dir is honored at any depth).
 
+# Directories to exclude (as an array, not a single string)
+EXCLUDES=(
+  .mypy_cache
+  __pycache__
+  .node_modules
+  node_modules
+  .git
+  .venv
+  .env
+  .tox
+  .pytest_cache
+  .next
+  .cache
+  .idea
+  .vscode
+)
+
+EXCLUDE_ARGS=() # kept for possible future grep flags
+
+# Require a pattern or grep options (e.g., -e PATTERN)
+if [ "$#" -eq 0 ]; then
+  echo "Usage: fif [grep-options] PATTERN" >&2
+  exit 1
+fi
+
+# Prefer grep recursion when it supports --exclude-dir; otherwise fall back to find -prune.
+if grep --version 2>/dev/null | head -n1 | grep -qi gnu; then
+  # GNU/BSD greps that support --exclude-dir
+  EXCLUDE_DIR_FLAGS=()
+  for EX in "${EXCLUDES[@]}"; do
+    EXCLUDE_DIR_FLAGS+=("--exclude-dir=${EX}")
+  done
+  grep -rnsI "${EXCLUDE_DIR_FLAGS[@]}" -- "$@" .
+else
+  # Build a find expression that prunes excluded directories at any depth
+  FIND_ARGS=(.)
+  FIND_ARGS+=(-type d "(")
+  for i in "${!EXCLUDES[@]}"; do
+    name="${EXCLUDES[$i]}"
+    FIND_ARGS+=(-name "$name")
+    if [ "$i" -lt $((${#EXCLUDES[@]} - 1)) ]; then
+      FIND_ARGS+=(-o)
+    fi
+  done
+  FIND_ARGS+=(")" -prune -o -type f -print)
+
+  # Search with grep via xargs. Note: uses newline delim (like original),
+  # so filenames with spaces may not be handled perfectly.
+  find "${FIND_ARGS[@]}" | xargs grep -nsI -- "$@"
+fi
