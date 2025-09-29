@@ -186,6 +186,8 @@ keybind('n', '-', ':%s/\\s\\+$//<CR>',
 keybind('n', ';', ':source ~/.config/nvim/init.vim<CR>',
   '; to reload vim config')
 
+keybind('n', 'q', '<Nop>', 'turn off q to record')
+
 
 ENDLUA
 
@@ -264,8 +266,11 @@ local function jump_callback(err, result, ctx, config)
   -- Open definition in a new tab if not already open
   local uri = result[1].uri or result.uri or result[1].targetUri or result.targetUri
   local bufnr = vim.uri_to_bufnr(uri)
-  if vim.fn.bufloaded(bufnr) == 0 then
+  local wins = vim.fn.win_findbuf(bufnr)
+  if vim.tbl_isempty(wins) then
     vim.cmd('tabnew')
+  else
+    vim.fn.win_gotoid(wins[1])
   end
 
   -- Use the correct API to jump to the location
@@ -754,4 +759,3 @@ autocmd BufRead *
 " lua << EOF
 " vim.lsp.set_log_level("debug")
 " EOF
-
