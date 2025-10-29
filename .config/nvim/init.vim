@@ -355,9 +355,19 @@ let g:jsx_ext_required = 0
 
 lua << END
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.mdx = {
+  install_info = {
+    url = "https://github.com/jlopezcur/tree-sitter-mdx",
+    files = { "src/parser.c" },
+    branch = "master",
+  },
+  filetype = "markdown.mdx",
+}
+
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml", "markdown", "markdown_inline" },
+  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml", "markdown", "markdown_inline", "mdx" },
   highlight = {
     enable = true,
   },
@@ -737,7 +747,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 ENDLUA
 
-au BufRead,BufNewFile */mdx set filetype=markdown
+autocmd BufRead,BufNewFile *.mdx set filetype=markdown.mdx
 
 autocmd VimEnter * GitGutterSignsDisable
 autocmd VimEnter * GitGutterLineHighlightsEnable
