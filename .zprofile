@@ -17,7 +17,7 @@ alias bf="~/butterfish/bin/butterfish"
 alias bfsh="butterfish shell -vA -H1024 --model gpt-4.1"
 
 alias pt="pytest -p no:warnings --timeout=10"
-alias pw="ptw --now . -- --timeout=10 -p no:warnings"
+alias pw="find . -type f -name \"*.py\" | entr pytest --timeout=10 -p no:warnings"
 
 export EDITOR=$(/usr/bin/which nvim)
 
@@ -43,12 +43,13 @@ bindkey "^e" end-of-line
 #alias diff='colorify diff'
 #alias make='colorify make'
 
-eval $(/opt/homebrew/bin/brew shellenv)
+eval "$(/opt/homebrew/bin/brew shellenv $(basename $SHELL))"
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# 
 
 
 
