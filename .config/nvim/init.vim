@@ -456,6 +456,18 @@ end
 
 local ts = require("nvim-treesitter")
 
+local function install_treesitter_parsers()
+  if vim.fn.executable("tree-sitter") == 0 then
+    vim.notify(
+      "Skipping nvim-treesitter parser installs: install tree-sitter-cli first",
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  ts.install(treesitter_languages)
+end
+
 if ts.install then
   register_main_mdx()
   vim.api.nvim_create_autocmd("User", {
@@ -465,7 +477,7 @@ if ts.install then
   ts.setup({
     install_dir = vim.fn.stdpath("data") .. "/site",
   })
-  ts.install(treesitter_languages)
+  install_treesitter_parsers()
   enable_treesitter_highlighting()
 else
   register_legacy_mdx()
@@ -520,7 +532,10 @@ local lsp_flags = {
 }
 
 
-local lspconfig = require('lspconfig')
+local function setup_lsp(server_name, config)
+  vim.lsp.config(server_name, config or {})
+  vim.lsp.enable(server_name)
+end
 
 local function resolve_rust_analyzer_cmd()
   -- Prefer a real binary from the stable toolchain so repo-local rust-toolchain
@@ -549,19 +564,19 @@ local function resolve_rust_analyzer_cmd()
 end
 
 -- Setup for Go language server
-lspconfig.gopls.setup({
+setup_lsp('gopls', {
   on_attach = lsp_keybinds,
   flags = lsp_flags,
 })
 
 -- Setup for TypeScript language server
-lspconfig.ts_ls.setup({
+setup_lsp('ts_ls', {
   on_attach = lsp_keybinds,
   flags = lsp_flags,
 })
 
 -- Setup for HTML language server
-lspconfig.html.setup({
+setup_lsp('html', {
   on_attach = lsp_keybinds,
   flags = lsp_flags,
 })
@@ -577,7 +592,7 @@ if rust_analyzer_cmd ~= nil then
   rust_analyzer_config.cmd = rust_analyzer_cmd
 end
 
-lspconfig.rust_analyzer.setup(rust_analyzer_config)
+setup_lsp('rust_analyzer', rust_analyzer_config)
 -- Pyright LSP configuration
 
 -- Path to the virtual environment
@@ -596,7 +611,7 @@ local on_attach = function(client, bufnr)
     lsp_keybinds(client, bufnr)
 end
 
-lspconfig.pyright.setup({
+setup_lsp('pyright', {
   capabilities = pyright_capabilities,
   settings = {
     pyright = {
@@ -619,7 +634,7 @@ lspconfig.pyright.setup({
 
 extra_args = { "--line-length", "100" }
 
-lspconfig.ruff.setup({
+setup_lsp('ruff', {
     on_attach = on_attach,
     flags = lsp_flags,
     init_options = {
