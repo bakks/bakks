@@ -14,7 +14,7 @@ export NVIM_LISTEN_ADDRESS=/tmp/nvim.$(echo $$).sock
 alias ls='ls -Ghl'
 alias vim="nvim"
 alias bf="~/butterfish/bin/butterfish"
-alias bfsh="butterfish shell -vA -H1024 --model gpt-4.1"
+alias bfsh="butterfish shell -vA"
 
 alias pt="pytest -p no:warnings --timeout=10"
 alias pw="find . -type f -name \"*.py\" | entr pytest --timeout=10 -p no:warnings"

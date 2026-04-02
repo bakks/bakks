@@ -20,7 +20,7 @@ Current setup:
 brew install node@16 npm tmux nvim fzf go yarn git gh htop reattach-to-user-namespace entr coreutils wget grc ripgrep glow
 brew install homebrew/cask-fonts/font-hack-nerd-font
 brew install bakks/bakks/poptop bakks/bakks/butterfish
-go install github.com/boyter/cs@v1.3.0
+go install github.com/boyter/cs@v2.0.0
 
 # npm packages
 npm install -g typescript typescript-language-server pyright prettier neovim

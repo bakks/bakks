@@ -212,9 +212,32 @@ keybind('v', ',e', ':BFExplain<CR>',   ',e to explain a block')
 keybind('n', ',f', ':BFFix<CR>',       ',f to fix an LSP error')
 keybind('n', ',i', ':BFImplement<CR>', ',i to implement based on preceding code')
 keybind('n', ',d', ':BFEdit ',         ',d to edit a file at arbitrary locations')
-keybind('n', ',h', ':BFHammer<CR>',    ',h to edit based on hammer.sh output')
-keybind('n', ',q', ':BFQuestion ',     ',q to ask a question')
+keybind('v', ',d', ':BFEdit ',         ',d to edit selected lines with full-file context')
+keybind('n', ',q', ':BFQuestion ',     ',q to ask a question about a line')
 keybind('v', ',q', ':BFQuestion ',     ',q to ask a question about a block')
+keybind('n', ',x', ':BFCancel<CR>',    ',x to cancel active butterfish job')
+keybind('v', ',x', ':BFCancel<CR>',    ',x to cancel active butterfish job')
+
+local function butterfish_cancel_silent()
+  local ok, bf = pcall(require, 'butterfish')
+  if ok and bf and bf.cancel then
+    pcall(bf.cancel, true)
+  end
+end
+
+keybind('n', '<C-c>', function()
+  butterfish_cancel_silent()
+end, 'ctrl-c to cancel active butterfish job', { silent = true })
+
+keybind('i', '<C-c>', function()
+  butterfish_cancel_silent()
+  return '<C-c>'
+end, 'ctrl-c to cancel active butterfish job', { expr = true, silent = true })
+
+keybind('v', '<C-c>', function()
+  butterfish_cancel_silent()
+  return '<Esc>'
+end, 'ctrl-c to cancel active butterfish job', { expr = true, silent = true })
 
 -- nvim-tree
 keybind('n', 'P', ':Tree<CR>', 'P to toggle file tree')
@@ -418,6 +441,32 @@ local lsp_flags = {
 
 local lspconfig = require('lspconfig')
 
+local function resolve_rust_analyzer_cmd()
+  -- Prefer a real binary from the stable toolchain so repo-local rust-toolchain
+  -- pins do not break the rustup proxy when that toolchain omits the component.
+  local stable_rust_analyzer = vim.fn.system({
+    "rustup",
+    "which",
+    "--toolchain",
+    "stable",
+    "rust-analyzer",
+  })
+
+  if vim.v.shell_error == 0 then
+    stable_rust_analyzer = vim.trim(stable_rust_analyzer)
+    if stable_rust_analyzer ~= "" and vim.fn.executable(stable_rust_analyzer) == 1 then
+      return { stable_rust_analyzer }
+    end
+  end
+
+  local rust_analyzer = vim.fn.exepath("rust-analyzer")
+  if rust_analyzer ~= "" then
+    return { rust_analyzer }
+  end
+
+  return nil
+end
+
 -- Setup for Go language server
 lspconfig.gopls.setup({
   on_attach = lsp_keybinds,
@@ -437,10 +486,17 @@ lspconfig.html.setup({
 })
 
 -- Setup for Rust language server
-lspconfig.rust_analyzer.setup({
+local rust_analyzer_config = {
   on_attach = lsp_keybinds,
   flags = lsp_flags,
-})
+}
+
+local rust_analyzer_cmd = resolve_rust_analyzer_cmd()
+if rust_analyzer_cmd ~= nil then
+  rust_analyzer_config.cmd = rust_analyzer_cmd
+end
+
+lspconfig.rust_analyzer.setup(rust_analyzer_config)
 -- Pyright LSP configuration
 
 -- Path to the virtual environment
@@ -449,6 +505,9 @@ if venv_path == nil then
   venv_path = os.getenv('HOME') .. '/.local/venv/nvim'
 end
 vim.g.python3_host_prog = venv_path .. '/bin/python'
+local pyright_capabilities = vim.lsp.protocol.make_client_capabilities()
+pyright_capabilities.workspace = pyright_capabilities.workspace or {}
+pyright_capabilities.workspace.didChangeWatchedFiles = { dynamicRegistration = false }
 
 local on_attach = function(client, bufnr)
     -- Disable hover in favor of Pyright
@@ -457,6 +516,7 @@ local on_attach = function(client, bufnr)
 end
 
 lspconfig.pyright.setup({
+  capabilities = pyright_capabilities,
   settings = {
     pyright = {
       disableOrganizeImports = false,
@@ -465,7 +525,7 @@ lspconfig.pyright.setup({
       analysis = {
         autoImportCompletions = true,
         autoSearchPaths = true, -- Automatically add search paths from your Python environment
-        diagnosticMode = "workspace", -- Perform diagnostics on files in your workspace
+        diagnosticMode = "openFilesOnly", -- Perform diagnostics only for open files
         useLibraryCodeForTypes = true, -- Use library implementations to extract type information
         typeCheckingMode = "basic", -- off, basic, strict
       },
@@ -723,7 +783,6 @@ vim.cmd("autocmd FileType php setlocal noexpandtab")
 
 -- Set file type for specific file extension
 vim.cmd("autocmd BufRead,BufNewFile *.g4 set filetype=antlr4")
-
 
 -- Create an autocmd group for Python file formatting and linting
 vim.api.nvim_create_augroup('PythonAutoGroup', {})
