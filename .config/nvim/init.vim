@@ -33,7 +33,7 @@ plugins = {
     {'mxw/vim-jsx', ft = {'javascript', 'javascript.jsx'}},
     {'prettier/vim-prettier', build = 'yarn install'},
     'neovim/nvim-lspconfig',
-    {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate'},
+    {'nvim-treesitter/nvim-treesitter', branch = 'main', lazy = false, build = ':TSUpdate'},
     'mhinz/vim-startify',
     {'github/copilot.vim', build = ':Copilot setup'},
     'airblade/vim-gitgutter',
@@ -378,23 +378,104 @@ let g:jsx_ext_required = 0
 
 lua << END
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.mdx = {
-  install_info = {
-    url = "https://github.com/jlopezcur/tree-sitter-mdx",
-    files = { "src/parser.c" },
-    branch = "master",
-  },
-  filetype = "markdown.mdx",
+-- Support the current master branch and the main-branch rewrite during migration.
+local treesitter_languages = {
+  "go",
+  "gomod",
+  "vim",
+  "json",
+  "javascript",
+  "html",
+  "make",
+  "lua",
+  "python",
+  "terraform",
+  "yaml",
+  "toml",
+  "markdown",
+  "markdown_inline",
+  "mdx",
 }
 
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "vim", "json", "javascript", "html", "make", "lua", "python", "terraform", "yaml", "toml", "markdown", "markdown_inline", "mdx" },
-  highlight = {
-    enable = true,
-  },
+local treesitter_filetypes = {
+  "go",
+  "gomod",
+  "vim",
+  "json",
+  "javascript",
+  "javascriptreact",
+  "javascript.jsx",
+  "jsx",
+  "html",
+  "make",
+  "lua",
+  "python",
+  "terraform",
+  "terraform-vars",
+  "yaml",
+  "toml",
+  "markdown",
+  "markdown.mdx",
 }
+
+local function register_legacy_mdx()
+  local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+  parser_config.mdx = {
+    install_info = {
+      url = "https://github.com/jlopezcur/tree-sitter-mdx",
+      files = { "src/parser.c" },
+      branch = "master",
+    },
+    filetype = "markdown.mdx",
+  }
+end
+
+local function register_main_mdx()
+  local parsers = require("nvim-treesitter.parsers")
+  parsers.mdx = {
+    install_info = {
+      url = "https://github.com/jlopezcur/tree-sitter-mdx",
+      files = { "src/parser.c" },
+      branch = "master",
+    },
+    filetype = "markdown.mdx",
+  }
+  vim.treesitter.language.register("mdx", "markdown.mdx")
+end
+
+local function enable_treesitter_highlighting()
+  local group = vim.api.nvim_create_augroup("TreesitterHighlight", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    pattern = treesitter_filetypes,
+    callback = function(ev)
+      pcall(vim.treesitter.start, ev.buf)
+    end,
+  })
+end
+
+local ts = require("nvim-treesitter")
+
+if ts.install then
+  register_main_mdx()
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "TSUpdate",
+    callback = register_main_mdx,
+  })
+  ts.setup({
+    install_dir = vim.fn.stdpath("data") .. "/site",
+  })
+  ts.install(treesitter_languages)
+  enable_treesitter_highlighting()
+else
+  register_legacy_mdx()
+  require("nvim-treesitter.configs").setup({
+    ensure_installed = treesitter_languages,
+    highlight = {
+      enable = true,
+    },
+  })
+end
 
 require'nvim-web-devicons'.setup {
  -- your personnal icons can go here (to override)

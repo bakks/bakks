@@ -9,4 +9,4 @@ autoload -U compinit; compinit -i -C
 export SSH_AUTH_SOCK=/Users/pbakkum/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 
 
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
